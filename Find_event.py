@@ -18,19 +18,49 @@ class Links_Generator():
             self.events_links_list.append(f'https://domtel-sport.pl/{self.events_id_list[i]}')
 
     def get_events_results_links(self):
-        self.events_results_links_list=[]
-        for j in range(0,len(self.events_links_list)):
+        self.events_results_links_list = []
+        for j in range(0, len(self.events_links_list)):
+
             self.event_html = requests.get(self.events_links_list[j])
             self.event_html.encoding = 'utf-8'
             self.event_html_text = self.event_html.text
             self.bowl = BeautifulSoup(self.event_html_text, 'lxml')
 
             for x in self.bowl.find_all('a', class_='roundbutton2x font-12 yellowbut', href=True):
-
                 self.events_results_links_list.append(x['href'])
+        # print(self.events_results_links_list)
 
+    def get_competitions_urls(self):
+        for i in range(0, len(self.events_results_links_list)):
+            self.prefix = self.events_results_links_list[i].partition('.')
+            self.competition_html = requests.get(self.events_results_links_list[i])
+            self.competition_html.encoding = 'utf-8'
+            self.competition_html_text = self.competition_html.text
+            self.competitions = BeautifulSoup(self.competition_html_text, 'lxml')
+            self.competitions_dictionaries_list = []
+            self.competitions_dict = {}
+            for y in self.competitions.find_all('td', align=False, width=False):
+                self.men = str(y).find('src="grafika/men_resize.jpg"')
+                self.women = str(y).find('src="grafika/women_resize.jpg"')
+                if self.men > 0:
+                    for z in y.find_all('a', class_="konkur_przycisk2_wyniki", href=True):
+                        if self.prefix[0] != 'https://online':
+                            self.competitions_dict[f'{z.text} M'] = f'{self.prefix[0]}.domtel-sport.pl/{z["href"]}'
+                        else:
+                            self.competitions_dict[
+                                f'{z.text} M'] = f'{self.prefix[0]}.domtel-sport.pl/index2.php{z["href"]}'
+                elif self.women > 0:
+                    for z in y.find_all('a', class_="konkur_przycisk2_wyniki", href=True):
+                        if self.prefix[0] != 'https://online':
+                            self.competitions_dict[f'{z.text} K'] = f'{self.prefix[0]}.domtel-sport.pl/{z["href"]}'
+                        else:
+                            self.competitions_dict[
+                                f'{z.text} K'] = f'{self.prefix[0]}.domtel-sport.pl/index2.php{z["href"]}'
+            self.competitions_dictionaries_list.append(self.competitions_dict)
+            # print(self.competitions_dictionaries_list)
 
 
 # hmp2023 = Links_Generator()
 # hmp2023.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
 # hmp2023.get_events_results_links()
+# hmp2023.get_competitions_urls()
