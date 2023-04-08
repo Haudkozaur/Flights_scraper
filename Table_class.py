@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import PySimpleGUI
+import PySimpleGUI as sg
 
 
 # requested_html = requests.get(
@@ -44,9 +44,9 @@ class Table:
         # print(self.rows_list_full[i])
 
     def display_table(self):
-        self.w, self.h = PySimpleGUI.Window.get_screen_size()
+        self.w, self.h = sg.Window.get_screen_size()
         self.layout = [
-            [PySimpleGUI.Table(
+            [sg.Table(
                 values=self.rows_list_full,
                 headings=self.headers_list,
                 max_col_width=35,
@@ -59,7 +59,7 @@ class Table:
                 row_height=35)]
         ]
 
-        self.window = PySimpleGUI.Window("Results", self.layout).read()
+        self.window = sg.Window("Results", self.layout).read()
 
 # event_results = Table(requested_html)
 # event_results.get_headers()
