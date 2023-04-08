@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 
+
 class GUI():
 
     def __init__(self, events_names_list, competitions_lists_list):
@@ -23,45 +24,67 @@ class GUI():
             self.list_of_layouts
 
         ]]
-        self.window_main = sg.Window("Results", self.layout_final, size=(800, 600), enable_close_attempted_event=True)
-        self.main=True
+        self.window_main = sg.Window("Results 1", self.layout_final, size=(800, 600), enable_close_attempted_event=True)
+        self.main = True
         while self.main:
             event, values = self.window_main.read()
             if type(event) == int:
                 self.chosen_event = event
                 print(self.chosen_event)
-                self.main=False
+                self.main = False
             if event == sg.WIN_CLOSE_ATTEMPTED_EVENT:
-                self.main=False
+                self.main = False
 
     def display_event_competitions_list(self):
         self.text = sg.Text("Select the competition", font='Default 25')
         self.list_of_layouts = []
+        self.column_1 = []
+        self.column_2 = []
+        self.column_3 = []
+        self.column_4 = []
+        self.column_5 = []
+        for i in range(0, len(self.competitions_lists_list[self.chosen_event]), 5):
+            self.column_1.append([sg.Button(self.competitions_lists_list[self.chosen_event][i][0], key=(i))])
+        for i in range(1, len(self.competitions_lists_list[self.chosen_event]), 5):
+            self.column_2.append([sg.Button(self.competitions_lists_list[self.chosen_event][i][0], key=(i))])
+        for i in range(2, len(self.competitions_lists_list[self.chosen_event]), 5):
+            self.column_3.append([sg.Button(self.competitions_lists_list[self.chosen_event][i][0], key=(i))])
+        for i in range(3, len(self.competitions_lists_list[self.chosen_event]), 5):
+            self.column_4.append([sg.Button(self.competitions_lists_list[self.chosen_event][i][0], key=(i))])
+        for i in range(4, len(self.competitions_lists_list[self.chosen_event]), 5):
+            self.column_5.append([sg.Button(self.competitions_lists_list[self.chosen_event][i][0], key=(i))])
 
-        for i in range(0, len(self.competitions_lists_list[self.chosen_event])):
-            self.but = [
-                [
-                    sg.B(self.competitions_lists_list[self.chosen_event][i][0], size=(15, 1), pad=(0, 0), key=(i))
-                ]
-            ]
-            self.layout = [self.but]
-            self.list_of_layouts.append(self.layout)
+        # for i in range(0, len(self.competitions_lists_list[self.chosen_event])):
+        #     self.but = [
+        #         [
+        #             sg.B(self.competitions_lists_list[self.chosen_event][i][0], size=(15, 1), key=(i))
+        #         ]
+        #     ]
+        #     self.list_of_layouts.append(self.but)
+
         self.layout_final = [[
             self.text,
-            self.list_of_layouts
-
+            sg.Column(self.column_1, vertical_alignment='top',
+                      key=1),
+            sg.Column(self.column_2, vertical_alignment='top',
+                      key=1),
+            sg.Column(self.column_3, vertical_alignment='top',
+                      key=1),
+            sg.Column(self.column_4, vertical_alignment='top',
+                      key=1),
+            sg.Column(self.column_5, vertical_alignment='top',
+                      key=1),
         ]]
-        self.window_sub = sg.Window("Results", self.layout_final, enable_close_attempted_event=True)
-        self.sub=True
+        self.window_sub = sg.Window("Results 2", self.layout_final, enable_close_attempted_event=True)
+        self.sub = True
         while self.sub:
             event, values = self.window_sub.read()
             if type(event) == int:
                 self.chosen_competition = event
                 print(self.chosen_competition)
-                self.sub=False
+                self.sub = False
             if event == sg.WIN_CLOSE_ATTEMPTED_EVENT:
-                self.sub=False
-
+                self.sub = False
 
 # list2 = [[['60 K', 'https://wmaci2023.domtel-sport.pl/?seria=1&runda=1&konkurencja=K60_35&dzien=&impreza=6'],
 #           ['200 K', 'https://wmaci2023.domtel-sport.pl/?seria=1&runda=1&konkurencja=K200_35&dzien=&impreza=6'],
