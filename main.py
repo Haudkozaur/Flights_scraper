@@ -37,13 +37,14 @@ class MainWindow:
         while True:
             event, values = self.window.read()
             if event in (sg.WIN_CLOSED, 'Exit'):
-                self.event = event
+                self.window.close()
                 break
-            elif event in self.sub_windows and not self.sub_windows[event].closed:
+            elif event in self.sub_windows and not self.sub_windows[event].close:
                 self.event = event
                 self.sub_windows[event].hide()
 
             else:
+
                 self.event = event
                 sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[event])
                 self.event = event
@@ -107,10 +108,12 @@ class SubWindow:
                 requested_html = requests.get(
                     last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
                 self.event_name = last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][0]
-                event_results = Table(requested_html, self.event_name)
+                event_results = Table(requested_html, self.event_name, last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
                 event_results.get_headers()
                 event_results.get_rows()
+                event_results.get_competition_steps()
                 event_results.display_table()
+
             if event in (sg.WIN_CLOSED, 'Close'):
                 self.window.close()
                 break
