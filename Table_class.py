@@ -8,7 +8,8 @@ import PySimpleGUI as sg
 
 
 class Table:
-    def __init__(self, url):
+    def __init__(self, url,event_name):
+        self.event_name=event_name
         self.html = url
         self.html.encoding = 'utf-8'
         self.html_text = self.html.text
@@ -59,7 +60,7 @@ class Table:
                 row_height=35)]
         ]
 
-        self.window = sg.Window("Results", self.layout).read()
+        self.window = sg.Window(self.event_name, self.layout,keep_on_top=True,).read()
 
 # event_results = Table(requested_html)
 # event_results.get_headers()
