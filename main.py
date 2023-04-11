@@ -2,11 +2,14 @@ import requests
 from Table_class import Table
 from Find_event import Links_Generator
 import PySimpleGUI as sg
-
+from Fav_athls import Favourite
 last_ten_events = Links_Generator()
 last_ten_events.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
 last_ten_events.get_events_results_links()
 last_ten_events.get_competitions_urls()
+
+temp=Favourite()
+temp.get_empty_table()
 
 
 class MainWindow:
@@ -24,8 +27,8 @@ class MainWindow:
             sg.Column(self.column_1, vertical_alignment='top',
                       key=1)]]
         self.layout = [
-            [sg.TabGroup([[sg.Tab('Windows', self.column_final, element_justification='center')],
-                          [sg.Tab('Other', [[self.text2]])]], tab_location='topleft')]]
+            [sg.TabGroup([[sg.Tab('Events', self.column_final, element_justification='center')],
+                          [sg.Tab('Athletes', temp.layout, key='-table-')]], tab_location='topleft')]]
         self.sub_windows = {}
 
         self.window = sg.Window('Domtel scraper 1.0', self.layout, size=(800, 600), resizable=False,
@@ -42,9 +45,17 @@ class MainWindow:
             elif event in self.sub_windows and not self.sub_windows[event].close:
                 self.event = event
                 self.sub_windows[event].hide()
+            elif event=='Submit':
+                self.text_input_name = values['name']
+                self.text_input_last_name = values['last_name']
+                print(self.text_input_name+" "+self.text_input_last_name)
+                temp.encode(self.text_input_name+" "+self.text_input_last_name)
+                temp.find_in_PZLA()
+                temp.get_athl_site()
+                self.window['-TABLE-'].update(values=temp.rows_list_full)
+                self.window.refresh()
 
             else:
-
                 self.event = event
                 sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[event])
                 self.event = event
