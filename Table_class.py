@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import PySimpleGUI as sg
 import requests
-
+sg.theme('DarkAmber')
 
 class Table:
     def __init__(self, url, event_name, events_results_links_list):
@@ -31,6 +31,7 @@ class Table:
                 self.row_text = self.row.text.strip().split()
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
+
 
     def get_competition_steps(self):
         self.buttons_list = []
