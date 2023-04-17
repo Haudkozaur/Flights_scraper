@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import PySimpleGUI as sg
 
-sg.theme('DarkAmber')
+# sg.theme('Dark')
 
 
 # imie = 'Albert'

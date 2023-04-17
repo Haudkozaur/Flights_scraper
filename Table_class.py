@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import PySimpleGUI as sg
 import requests
-sg.theme('DarkAmber')
+
 
 class Table:
     def __init__(self, url, event_name, events_results_links_list):
@@ -65,6 +65,7 @@ class Table:
         while self.lock:
             event, values = self.window.read()
             if event in (sg.WIN_CLOSED, 'Exit'):
+                self.table_exit=True
                 break
             elif event in self.sub_windows and not self.sub_windows[event].close:
                 self.event = event
@@ -72,6 +73,7 @@ class Table:
             if type(event) == int:
                 self.window.close()
                 self.chosen_step = event
+
                 if self.prefix[0] != 'https://online':
                     self.requested_html = requests.get(
                         f'{self.prefix[0]}.domtel-sport.pl/{self.buttons_list[self.chosen_step][1]}')
