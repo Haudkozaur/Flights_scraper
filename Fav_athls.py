@@ -7,18 +7,12 @@ import PySimpleGUI as sg
 class Favourite:
     def encode(self, first_last_name):
         self.first_last_name = first_last_name
-        print(self.first_last_name)
         self.first_last_name = self.first_last_name.upper()
-        print(self.first_last_name)
         self.first_last_name_encoded = self.first_last_name.encode(encoding='iso-8859-2')
-        print(self.first_last_name)
         self.first_last_name_encoded = str(self.first_last_name_encoded).replace('\\x', '%')
-        print(self.first_last_name_encoded)
         self.first_last_name_encoded = self.first_last_name_encoded.upper()
         self.first_last_name_encoded = str(self.first_last_name_encoded).replace("B'", "").replace("'", "")
-        print(self.first_last_name_encoded)
         self.first_last_name_encoded_part = self.first_last_name_encoded.partition(" ")
-        print(self.first_last_name_encoded_part)
 
     def find_in_PZLA(self):
         self.stats_website = f'https://statystyka.pzla.pl/baza/?file=Szukaj&zawodnik={self.first_last_name_encoded_part[2]}&zawodnik_imie={self.first_last_name_encoded_part[0]}'
@@ -37,8 +31,8 @@ class Favourite:
         self.athl_number.sort()
         self.athl_number = self.athl_number[-1]
         print(self.athl_number)
-        with open("fav.txt", mode='a') as file:
-            file.write(f'{self.first_last_name_encoded} {self.athl_number}\n')
+        # with open("fav.txt", mode='a') as file:
+        #     file.write(f'{self.first_last_name_encoded} {self.athl_number}\n')
         # winter
         self.athl_domtel_winter = f'{self.athl_domtel}&sezon_Z_L=Z'
         print(self.athl_domtel_winter)
@@ -75,8 +69,8 @@ class Favourite:
         for i in range(3, len(self.cols)):
             self.rows = self.cols[i].find_all('td')
             self.rows_list = []
-            for self.row in self.rows:
-                self.row_text = self.row.text.strip().split()
+            for row in self.rows:
+                self.row_text = row.text.strip().split()
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
         # winter
@@ -92,7 +86,7 @@ class Favourite:
         for i in range(3, len(self.cols_winter)):
             self.rows_winter = self.cols_winter[i].find_all('td')
             self.rows_list_winter = []
-            for self.row in self.rows_winter:
-                self.row_text_winter = self.row.text.strip().split()
+            for row in self.rows_winter:
+                self.row_text_winter = row.text.strip().split()
                 self.rows_list_winter.append(" ".join(self.row_text_winter))
             self.rows_list_full_winter.append(self.rows_list_winter)

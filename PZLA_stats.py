@@ -88,42 +88,49 @@ class PZLA():
         for i in range(0, len(self.events_list_full_temp)):
             self.column_of_events.append(self.events_list_full_temp[i][0])
             # self.dictionary_of_events[self.events_list_full_temp[i][0]] = self.events_list_full_temp[i][1]
+    def create_basic_layout_domtel(self):
+        self.headings = ['competition', 'result', 'date', 'city']
+        self.fourth_tab_layout = [
+            [sg.Text('Insert athletes data to find events in which he was participating this year')],
+            [sg.InputText('athelete name', key='name_PZLA_domtel')],
+            [sg.InputText('athelete last name', key='last_name_PZLA_domtel')],
+            [sg.Button('Find events',key='find_events_PZLA_domtel')],
+            [sg.Table(
+                values=[],
+                headings=self.headings,
+                def_col_width=15,
+                auto_size_columns=False,
+                display_row_numbers=False,
+                vertical_scroll_only=False,
+                justification='center',
+                key='-stats-domtel',
+                row_height=35)]]
 
     def get_events_from_athlete_site(self, url):
         self.athl_domtel = url
-        self.athl_domtel_season = f'{self.athl_domtel}&sezon=2022&sezon2=L'
+        self.athl_domtel_season = f'{self.athl_domtel.replace("profile","sb")}&sezon=2022&sezon2=L'
+        print(self.athl_domtel_season)
         self.athl_site_html = requests.get(self.athl_domtel_season)
         self.athl_site_html.encoding = 'iso-8859-2'
         self.athl_site_html_text = self.athl_site_html.text
         self.soup = BeautifulSoup(self.athl_site_html_text, 'lxml')
-        self.table = self.soup.find('table', border=0, width="500", cellspacing=False, cellpadding=0, style=False)
-        print(self.table)
-        self.cols = self.table.find_all('tr')
+        self.table = self.soup.find_all('table', border=0, width="500", cellspacing=0, cellpadding=0, style=False)
+        # print(self.table)
+        self.cols = self.table[1].find_all('tr')
         self.rows_list_full = []
-        for i in range(3, len(self.cols)):
+        for i in range(6, len(self.cols)):
             self.rows = self.cols[i].find_all('td')
             self.rows_list = []
             for self.row in self.rows:
                 self.row_text = self.row.text.strip().split()
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
-        self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
-        self.layout_season = [
-            [sg.InputText('athelete name', key='name')],
-            [sg.InputText('athelete last name', key='last_name')],
-            [sg.Button('Submit')],
-            [sg.Table(
-                values=self.rows_list_full,
-                headings=self.headings_list,
-                def_col_width=15,
-                auto_size_columns=False,
-                display_row_numbers=False,
-                vertical_scroll_only=False,
-                justification='center',
-                num_rows=len(self.rows_list_full),
-                key='-TABLE_season-',
-                row_height=35)]
-        ]
+        for row in range(0,len(self.rows_list_full)):
+            try:
+                self.rows_list_full[row].pop(2)
+            except:
+                pass
+
 
 
 

@@ -19,7 +19,7 @@ stats = PZLA('https://statystyka.pzla.pl/spis_imprez.php?Sezon=',
              'https://statystyka.pzla.pl/spis_imprez.php?Sezon=2023Z&FiltrM=&FiltrWoj=')
 
 stats.create_basic_layout()
-
+stats.create_basic_layout_domtel()
 
 # stats.get_events_from_athlete_site('https://statystyka.pzla.pl/personal.php?page=profile&nr_zaw=71643&%3Cr=')
 
@@ -40,7 +40,11 @@ class MainWindow:
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.column_final, element_justification='center')],
                           [sg.Tab('Athletes', temp.layout, key='-table-')],
-                          [sg.Tab('Check if participated', stats.third_tab_layout, key='-table-')]],
+                          [sg.Tab('Check recent results', stats.fourth_tab_layout, key='-table-')],
+                          [sg.Tab('Advanced searching', stats.third_tab_layout, key='-table-')],
+                          [sg.Tab('Check startlists', [[sg.Text('this section will be avilable in the future')]], key='-table-')]
+
+                          ],
                          tab_location='topleft')]
         ]
         self.sub_windows = {}
@@ -72,7 +76,7 @@ class MainWindow:
                     self.window['Indoor'].update(visible=True)
                     self.window.refresh()
                 except:
-                    pass
+                    sg.popup('Enter the correct data.')
             elif event == 'Outdoor':
                 if hasattr(temp, 'rows_list_full'):
                     self.window['-TABLE-'].update(values=temp.rows_list_full)
@@ -97,7 +101,19 @@ class MainWindow:
                 stats.produce_layout()
                 self.window['-stats-'].update(values=stats.column_of_events)
                 self.window.refresh()
-
+            elif event == 'find_events_PZLA_domtel':
+                self.text_input_name_PZLA = values['name_PZLA_domtel']
+                self.text_input_last_name_PZLA = values['last_name_PZLA_domtel']
+                self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
+                self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
+                self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
+                print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
+                temp_fav_object=Favourite()
+                temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
+                temp_fav_object.find_in_PZLA()
+                stats.get_events_from_athlete_site(temp_fav_object.athl_domtel)
+                self.window['-stats-domtel'].update(values=stats.rows_list_full)
+                self.window.refresh()
             else:
                 self.event = event
                 sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[event])
