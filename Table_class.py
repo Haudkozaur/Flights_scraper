@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import PySimpleGUI as sg
 import requests
-sg.theme('DarkAmber')
+
 
 class Table:
     def __init__(self, url, event_name, events_results_links_list):
@@ -32,19 +32,19 @@ class Table:
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
 
-
     def get_competition_steps(self):
         self.buttons_list = []
         for button in self.soup.find_all('a', class_='konkur_przycisk', href=True, target=False):
             if len(button['href']) > 30:
                 self.buttons_list.append([button.text, button['href']])
-
-        self.column_comp_steps = []
-        for i in range(0, len(self.buttons_list)):
-            self.column_comp_steps.append([sg.Button(self.buttons_list[i][0], key=i)])
-
+        if self.buttons_list !=[]:
+            self.column_comp_steps = [[sg.Button(self.buttons_list[0][0], key=0, button_color='darkgreen')]]
+            for i in range(1, len(self.buttons_list)):
+                self.column_comp_steps.append([sg.Button(self.buttons_list[i][0], key=i)])
+        else:
+            self.column_comp_steps = []
     def display_table(self):
-        self.w, self.h = sg.Window.get_screen_size()
+
         self.layout = [
             [sg.Table(
                 values=self.rows_list_full,
@@ -55,23 +55,23 @@ class Table:
                 vertical_scroll_only=False,
                 justification='center',
                 num_rows=len(self.rows_list_full),
-                key='-TABLE-',
+                key='-TABLE_table-',
                 row_height=35),
                 sg.Column(self.column_comp_steps, vertical_alignment='top')
 
             ]]
+
+    def Run_table(self):
         self.window = sg.Window(self.event_name, self.layout, keep_on_top=True, size=(1400, 600))
-        self.lock = True
-        while self.lock:
+        while True:
             event, values = self.window.read()
             if event in (sg.WIN_CLOSED, 'Exit'):
+                self.table_exit = True
                 break
-            elif event in self.sub_windows and not self.sub_windows[event].close:
-                self.event = event
-                self.sub_windows[event].hide()
             if type(event) == int:
-                self.window.close()
+
                 self.chosen_step = event
+
                 if self.prefix[0] != 'https://online':
                     self.requested_html = requests.get(
                         f'{self.prefix[0]}.domtel-sport.pl/{self.buttons_list[self.chosen_step][1]}')
@@ -87,6 +87,16 @@ class Table:
                 temp_object.get_headers()
                 temp_object.get_rows()
                 temp_object.get_competition_steps()
-                temp_object.display_table()
-                self.chosen_step = event
+
+                self.table_widget = self.window['-TABLE_table-'].Widget
+                for cid, text in zip(self.headings_list, temp_object.headings_list):
+                    self.table_widget.heading(cid, text=text)
+                self.window['-TABLE_table-'].update(values=(temp_object.rows_list_full))
+                self.window['-TABLE_table-'].update(num_rows=len(temp_object.rows_list_full))
+                for button in range(0, len(self.buttons_list)):
+                    self.window[button].update(button_color=sg.theme_button_color()[1])
+                self.window[self.chosen_step].update(button_color='darkgreen')
+
+                self.window.refresh()
+
                 self.sub_windows[event] = temp_object

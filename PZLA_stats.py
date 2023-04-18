@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import PySimpleGUI as sg
-sg.theme('DarkAmber')
+
 
 class PZLA():
     def __init__(self, url, url_winter):

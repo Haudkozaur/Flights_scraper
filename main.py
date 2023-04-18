@@ -4,8 +4,9 @@ from Find_event import Links_Generator
 import PySimpleGUI as sg
 from Fav_athls import Favourite
 from PZLA_stats import PZLA
-import webbrowser
-sg.theme('DarkAmber')
+
+sg.theme('DarkTeal10')
+
 last_ten_events = Links_Generator()
 last_ten_events.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
 last_ten_events.get_events_results_links()
@@ -18,6 +19,8 @@ stats = PZLA('https://statystyka.pzla.pl/spis_imprez.php?Sezon=',
              'https://statystyka.pzla.pl/spis_imprez.php?Sezon=2023Z&FiltrM=&FiltrWoj=')
 
 stats.create_basic_layout()
+
+
 # stats.get_events_from_athlete_site('https://statystyka.pzla.pl/personal.php?page=profile&nr_zaw=71643&%3Cr=')
 
 class MainWindow:
@@ -37,7 +40,6 @@ class MainWindow:
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.column_final, element_justification='center')],
                           [sg.Tab('Athletes', temp.layout, key='-table-')],
-
                           [sg.Tab('Check if participated', stats.third_tab_layout, key='-table-')]],
                          tab_location='topleft')]
         ]
@@ -66,19 +68,22 @@ class MainWindow:
                     temp.find_in_PZLA()
                     temp.get_athl_site()
                     self.window['-TABLE-'].update(values=temp.rows_list_full)
-                    self.window['Outdoor'].update(visible=True)
+                    self.window['Outdoor'].update(visible=True, button_color='darkgreen')
                     self.window['Indoor'].update(visible=True)
                     self.window.refresh()
                 except:
                     pass
-            elif event =='Outdoor':
+            elif event == 'Outdoor':
                 if hasattr(temp, 'rows_list_full'):
                     self.window['-TABLE-'].update(values=temp.rows_list_full)
-
+                    self.window['Outdoor'].update(button_color='darkgreen')
+                    self.window['Indoor'].update(button_color=sg.theme_button_color()[1])
                     self.window.refresh()
             elif event == 'Indoor':
                 if hasattr(temp, 'rows_list_full_winter'):
                     self.window['-TABLE-'].update(values=temp.rows_list_full_winter)
+                    self.window['Indoor'].update(button_color='darkgreen')
+                    self.window['Outdoor'].update(button_color=sg.theme_button_color()[1])
                     self.window.refresh()
             elif event == 'Find events':
                 self.text_input_name_PZLA = values['name_PZLA']
@@ -127,15 +132,17 @@ class SubWindow:
             self.column_5.append([sg.Button(self.competitions_lists_list[GUI.event][i][0], key=i)])
         for i in range(5, len(self.competitions_lists_list[GUI.event]), 6):
             self.column_6.append([sg.Button(self.competitions_lists_list[GUI.event][i][0], key=i)])
-        self.back = sg.Button('back')
+
         self.layout_final = [[
 
-            sg.Column(self.column_1, vertical_alignment='top'),
-            sg.Column(self.column_2, vertical_alignment='top'),
-            sg.Column(self.column_3, vertical_alignment='top'),
-            sg.Column(self.column_4, vertical_alignment='top'),
-            sg.Column(self.column_5, vertical_alignment='top'),
-            sg.Column(self.column_6, vertical_alignment='top')
+            sg.Column(self.column_1, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
+            sg.Column([[sg.Button('back', pad=[[70, 0], [550, 0]])]], element_justification='right', size=(200, 600))
+
         ]]
 
         if self.column_1 != []:
@@ -144,7 +151,17 @@ class SubWindow:
                                     grab_anywhere_using_control=False, keep_on_top=True, )
         elif self.column_1 == []:
             self.layout_final = [[sg.Text(
-                'Unfortunately, we are unable to provide information about the results of the selected event')]]
+                'Unfortunately, we are unable to provide information about the results of the selected event')],
+                [sg.Column(self.column_1, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
+            sg.Column([[sg.Button('back', pad=[[70, 0], [530, 0]])]], element_justification='right', size=(200, 600))
+
+        ]
+            ]
             self.window = sg.Window(self.events_names_list, self.layout_final,
                                     size=(800, 600), resizable=False,
                                     grab_anywhere=False,
@@ -154,6 +171,8 @@ class SubWindow:
             if type(event) == int:
                 self.chosen_event = event
                 print(self.chosen_event)
+
+                self.window[event].update(button_color='darkgreen')
                 requested_html = requests.get(
                     last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
                 self.event_name = last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][0]
@@ -163,8 +182,14 @@ class SubWindow:
                 event_results.get_rows()
                 event_results.get_competition_steps()
                 event_results.display_table()
-
-            if event in (sg.WIN_CLOSED, 'Close'):
+                event_results.Run_table()
+                if hasattr(event_results, 'table_exit'):
+                    for key in range(0, self.chosen_event + 1):
+                        try:
+                            self.window[key].update(button_color=sg.theme_button_color()[1])
+                        except:
+                            pass
+            if event in (sg.WIN_CLOSED, 'Close') or event == 'back':
                 self.window.close()
                 break
 

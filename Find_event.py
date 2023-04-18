@@ -30,8 +30,7 @@ class Links_Generator():
                 self.events_names_list.append(i.text)
             for x in self.bowl.find_all('a', class_='roundbutton2x font-12 yellowbut', href=True):
                 self.events_results_links_list.append(x['href'])
-        # print(self.events_names_list)
-        # print(self.events_results_links_list)
+
 
     def get_competitions_urls(self):
         self.competitions_lists_list = []
@@ -60,11 +59,8 @@ class Links_Generator():
                         else:
                             self.competitions_list.append([
                                 f'{z.text} K', f'{self.prefix[0]}.domtel-sport.pl/index2.php{z["href"]}'])
-            # print(len(self.competitions_list))
-            self.competitions_lists_list.append(self.competitions_list)
-        # print(self.competitions_lists_list)
 
-# hmp2023 = Links_Generator()
-# hmp2023.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
-# hmp2023.get_events_results_links()
-# hmp2023.get_competitions_urls()
+            self.competitions_lists_list.append(self.competitions_list)
+
+
+
