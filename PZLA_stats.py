@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import PySimpleGUI as sg
+import re
 
 
 class PZLA():
@@ -88,13 +89,18 @@ class PZLA():
         for i in range(0, len(self.events_list_full_temp)):
             self.column_of_events.append(self.events_list_full_temp[i][0])
             # self.dictionary_of_events[self.events_list_full_temp[i][0]] = self.events_list_full_temp[i][1]
+
     def create_basic_layout_domtel(self):
         self.headings = ['competition', 'result', 'date', 'city']
         self.fourth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating this year')],
             [sg.InputText('athelete name', key='name_PZLA_domtel')],
-            [sg.InputText('athelete last name', key='last_name_PZLA_domtel')],
-            [sg.Button('Find events',key='find_events_PZLA_domtel')],
+            [sg.InputText('athelete last name', key='last_name_PZLA_domtel'),
+             sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
+             sg.Button("Choose", visible=False)],
+            [sg.Button('Find events', key='find_events_PZLA_domtel')],
+            [sg.Button('Outdoor', visible=False, key='Outdoor_season'),
+             sg.Button('Indoor', visible=False, key='Indoor_season')],
             [sg.Table(
                 values=[],
                 headings=self.headings,
@@ -103,14 +109,57 @@ class PZLA():
                 display_row_numbers=False,
                 vertical_scroll_only=False,
                 justification='center',
-                key='-stats-domtel',
+                key='-stats-domtel-',
                 row_height=35)]]
 
     def get_events_from_athlete_site(self, url):
         self.athl_domtel = url
-        self.athl_domtel_season = f'{self.athl_domtel.replace("profile","sb")}&sezon=2022&sezon2=L'
+        self.athl_domtel_season = f'{self.athl_domtel.replace("profile", "sb")}'
         print(self.athl_domtel_season)
-        self.athl_site_html = requests.get(self.athl_domtel_season)
+        self.athl_site_season_html = requests.get(self.athl_domtel_season)
+        self.athl_site_season_html.encoding = 'iso-8859-2'
+        self.athl_site_season_html_text = self.athl_site_season_html.text
+        self.season = BeautifulSoup(self.athl_site_season_html_text, 'lxml')
+        self.years = self.season.find('table', border=0, width="500", cellspacing=0, cellpadding=0,
+                                      style='border: 1 dotted #A4CFFF')
+        self.col_season = self.years.find_all('tr')
+        self.years_outdoor_list = []
+        self.years_indoor_list = []
+        for col in self.col_season:
+            for row in col.find_all('td', colspan="5"):
+                for cell in row.find_all('a', href=True):
+                    if (cell["href"])[-1] == 'L':
+                        self.years_outdoor_list.append(f'https://statystyka.pzla.pl/{cell["href"]}')
+                    if (cell["href"])[-1] == 'Z':
+                        self.years_indoor_list.append(f'https://statystyka.pzla.pl/{cell["href"]}')
+            break
+
+        self.years_nums_outdoor_list = []
+        self.years_nums_indoor_list = []
+        for year in self.years_outdoor_list:
+            self.year = re.findall('\d+', year)
+            self.year = list(map(int, self.year))
+            self.year.sort()
+            self.years_nums_outdoor_list.append(self.year[-2])
+        for year in self.years_indoor_list:
+            self.year = re.findall('\d+', year)
+            self.year = list(map(int, self.year))
+            self.year.sort()
+            self.years_nums_indoor_list.append(self.year[-2])
+
+
+        self.outdoor_dictionary = {years_nums_outdoor_list: years_outdoor_list for
+                                   years_nums_outdoor_list, years_outdoor_list in
+                                   zip(self.years_nums_outdoor_list, self.years_outdoor_list)}
+        self.indoor_dictionary = {years_nums_indoor_list: years_indoor_list for
+                                   years_nums_indoor_list, years_indoor_list in
+                                   zip(self.years_nums_indoor_list, self.years_indoor_list)}
+        print(self.outdoor_dictionary)
+        print(self.indoor_dictionary)
+
+    def get_season_results(self, url):
+        self.url_season = url
+        self.athl_site_html = requests.get(self.url_season)
         self.athl_site_html.encoding = 'iso-8859-2'
         self.athl_site_html_text = self.athl_site_html.text
         self.soup = BeautifulSoup(self.athl_site_html_text, 'lxml')
@@ -125,15 +174,11 @@ class PZLA():
                 self.row_text = self.row.text.strip().split()
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
-        for row in range(0,len(self.rows_list_full)):
+        for row in range(0, len(self.rows_list_full)):
             try:
                 self.rows_list_full[row].pop(2)
             except:
                 pass
-
-
-
-
 
 # stats = PZLA('https://statystyka.pzla.pl/spis_imprez.php?Sezon=',
 #              'https://statystyka.pzla.pl/spis_imprez.php?Sezon=2023Z&FiltrM=&FiltrWoj=')

@@ -51,7 +51,7 @@ class MainWindow:
 
         self.window = sg.Window('Domtel scraper 1.0', self.layout, size=(800, 600), resizable=False,
                                 grab_anywhere=False,
-                                grab_anywhere_using_control=False, keep_on_top=True)
+                                grab_anywhere_using_control=False, keep_on_top=False)
 
     def run(self):
 
@@ -74,6 +74,7 @@ class MainWindow:
                     self.window['-TABLE-'].update(values=temp.rows_list_full)
                     self.window['Outdoor'].update(visible=True, button_color='darkgreen')
                     self.window['Indoor'].update(visible=True)
+                    self.window['Indoor'].update(button_color=sg.theme_button_color()[1])
                     self.window.refresh()
                 except:
                     sg.popup('Enter the correct data.')
@@ -100,8 +101,10 @@ class MainWindow:
                 stats.check_if_athl_participated(self.text_input_last_name_PZLA + " " + self.text_input_name_PZLA)
                 stats.produce_layout()
                 self.window['-stats-'].update(values=stats.column_of_events)
+
                 self.window.refresh()
             elif event == 'find_events_PZLA_domtel':
+                self.season = 'Out'
                 self.text_input_name_PZLA = values['name_PZLA_domtel']
                 self.text_input_last_name_PZLA = values['last_name_PZLA_domtel']
                 self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
@@ -112,8 +115,41 @@ class MainWindow:
                 temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
                 temp_fav_object.find_in_PZLA()
                 stats.get_events_from_athlete_site(temp_fav_object.athl_domtel)
-                self.window['-stats-domtel'].update(values=stats.rows_list_full)
+                stats.get_season_results(stats.years_outdoor_list[-1])
+                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                self.window['-years-'].update(visible=True)
+                self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                self.window['Outdoor_season'].update(visible=True)
+                self.window['Indoor_season'].update(visible=True)
+                self.window['Choose'].update(visible=True)
+                self.window['Outdoor_season'].update(button_color='darkgreen')
+                self.window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+            elif event == 'Outdoor_season':
+                self.season='Out'
+                self.window['Outdoor_season'].update(button_color='darkgreen')
+                self.window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+                stats.get_season_results(stats.years_outdoor_list[-1])
+                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+            elif event == 'Indoor_season':
+                self.season = 'In'
+                self.window['Indoor_season'].update(button_color='darkgreen')
+                self.window['Outdoor_season'].update(button_color=sg.theme_button_color()[1])
+                stats.get_season_results(stats.years_indoor_list[-1])
+                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                self.window['-years-'].update(values=stats.years_nums_indoor_list)
                 self.window.refresh()
+            elif event == 'Choose':
+                self.selected_option = values['-years-']
+                self.selected_option=int((str(self.selected_option)).replace('[',"").replace(']',""))
+                print(type(self.selected_option))
+                print(self.selected_option)
+                if self.season=='Out':
+                    stats.get_season_results(stats.outdoor_dictionary[self.selected_option])
+                    self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                elif self.season=='In':
+                    stats.get_season_results(stats.indoor_dictionary[self.selected_option])
+                    self.window['-stats-domtel-'].update(values=stats.rows_list_full)
             else:
                 self.event = event
                 sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[event])
@@ -164,7 +200,7 @@ class SubWindow:
         if self.column_1 != []:
             self.window = sg.Window(self.events_names_list, self.layout_final, size=(800, 600), resizable=False,
                                     grab_anywhere=False,
-                                    grab_anywhere_using_control=False, keep_on_top=True, )
+                                    grab_anywhere_using_control=False, keep_on_top=False, )
         elif self.column_1 == []:
             self.layout_final = [[sg.Text(
                 'Unfortunately, we are unable to provide information about the results of the selected event')],
@@ -181,7 +217,7 @@ class SubWindow:
             self.window = sg.Window(self.events_names_list, self.layout_final,
                                     size=(800, 600), resizable=False,
                                     grab_anywhere=False,
-                                    grab_anywhere_using_control=False, keep_on_top=True, )
+                                    grab_anywhere_using_control=False, keep_on_top=False, )
         while True:
             event, values = self.window.read()
             if type(event) == int:
