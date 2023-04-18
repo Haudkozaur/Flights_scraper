@@ -5,7 +5,7 @@ import PySimpleGUI as sg
 from Fav_athls import Favourite
 from PZLA_stats import PZLA
 
-sg.theme('DarkAmber')
+sg.theme('DarkTeal10')
 
 last_ten_events = Links_Generator()
 last_ten_events.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
@@ -40,7 +40,6 @@ class MainWindow:
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.column_final, element_justification='center')],
                           [sg.Tab('Athletes', temp.layout, key='-table-')],
-
                           [sg.Tab('Check if participated', stats.third_tab_layout, key='-table-')]],
                          tab_location='topleft')]
         ]
@@ -136,12 +135,14 @@ class SubWindow:
 
         self.layout_final = [[
 
-            sg.Column(self.column_1, vertical_alignment='top'),
-            sg.Column(self.column_2, vertical_alignment='top'),
-            sg.Column(self.column_3, vertical_alignment='top'),
-            sg.Column(self.column_4, vertical_alignment='top'),
-            sg.Column(self.column_5, vertical_alignment='top'),
-            sg.Column(self.column_6, vertical_alignment='top')
+            sg.Column(self.column_1, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
+            sg.Column([[sg.Button('back', pad=[[70, 0], [550, 0]])]], element_justification='right', size=(200, 600))
+
         ]]
 
         if self.column_1 != []:
@@ -150,7 +151,17 @@ class SubWindow:
                                     grab_anywhere_using_control=False, keep_on_top=True, )
         elif self.column_1 == []:
             self.layout_final = [[sg.Text(
-                'Unfortunately, we are unable to provide information about the results of the selected event')]]
+                'Unfortunately, we are unable to provide information about the results of the selected event')],
+                [sg.Column(self.column_1, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
+            sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
+            sg.Column([[sg.Button('back', pad=[[70, 0], [530, 0]])]], element_justification='right', size=(200, 600))
+
+        ]
+            ]
             self.window = sg.Window(self.events_names_list, self.layout_final,
                                     size=(800, 600), resizable=False,
                                     grab_anywhere=False,
@@ -171,13 +182,14 @@ class SubWindow:
                 event_results.get_rows()
                 event_results.get_competition_steps()
                 event_results.display_table()
-            if hasattr(event_results, 'table_exit'):
-                for key in range(0, self.chosen_event + 1):
-                    try:
-                        self.window[key].update(button_color=sg.theme_button_color()[1])
-                    except:
-                        pass
-            if event in (sg.WIN_CLOSED, 'Close'):
+                event_results.Run_table()
+                if hasattr(event_results, 'table_exit'):
+                    for key in range(0, self.chosen_event + 1):
+                        try:
+                            self.window[key].update(button_color=sg.theme_button_color()[1])
+                        except:
+                            pass
+            if event in (sg.WIN_CLOSED, 'Close') or event == 'back':
                 self.window.close()
                 break
 

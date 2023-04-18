@@ -3,14 +3,6 @@ from bs4 import BeautifulSoup
 import re
 import PySimpleGUI as sg
 
-# sg.theme('Dark')
-
-
-# imie = 'Albert'
-# nazwisko = 'Komański'
-# athl = imie + " " + nazwisko
-# print(athl)
-
 
 class Favourite:
     def encode(self, first_last_name):
@@ -54,6 +46,7 @@ class Favourite:
     def get_empty_table(self):
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
         self.layout = [
+            [sg.Text("Enter athletes data to check his/her PR's ")],
             [sg.InputText('athelete name', key='name')],
             [sg.InputText('athelete last name', key='last_name')],
             [sg.Button('Submit')],
@@ -93,7 +86,7 @@ class Favourite:
         self.soup_winter = BeautifulSoup(self.athl_site_winter_html_text, 'lxml')
         self.table_winter = self.soup_winter.find('table', border=0, width="500", cellspacing=False, cellpadding=0,
                                                   style=False)
-        print(self.table_winter)
+
         self.cols_winter = self.table_winter.find_all('tr')
         self.rows_list_full_winter = []
         for i in range(3, len(self.cols_winter)):
@@ -103,26 +96,3 @@ class Favourite:
                 self.row_text_winter = self.row.text.strip().split()
                 self.rows_list_winter.append(" ".join(self.row_text_winter))
             self.rows_list_full_winter.append(self.rows_list_winter)
-        print(self.rows_list_full_winter)
-
-        # self.layout = [
-        #     [sg.InputText('athelete name', key='name')],
-        #     [sg.InputText('athelete last name', key='last_name')],
-        #     [sg.Button('Submit')],
-        #     [sg.Table(
-        #         values=self.rows_list_full,
-        #         headings=self.headings_list,
-        #         def_col_width=50,
-        #         auto_size_columns=False,
-        #         display_row_numbers=False,
-        #         vertical_scroll_only=False,
-        #         justification='center',
-        #         num_rows=len(self.rows_list_full),
-        #         key='-TABLE_UP-',
-        #         row_height=35)]
-        # ]
-
-# athl = Favourite()
-# athl.encode(athl)
-# athl.find_in_PZLA()
-# athl.get_athl_site()
