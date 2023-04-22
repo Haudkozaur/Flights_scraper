@@ -14,7 +14,7 @@ class sub_GUI_run:
         self.competitions_lists_list = competitions_lists_list
         print(self.competitions_lists_list[GUI.event])
         # the monstrosity below was forced by the nature of the pysimpleGUI library
-        # which can't read a list when creating a column item inside layout
+        # which can't read a list when creating a column item inside layout unfortunately
         for i in range(0, len(self.competitions_lists_list[GUI.event]), 6):
             print('wtf1')
             self.column_1.append([sg.Button(self.competitions_lists_list[GUI.event][i][0], key=i)])

@@ -110,7 +110,7 @@ class SubWindow:
         sub_GUI_events_temp=sub_GUI_run()
         sub_GUI_events_temp.create_sub_layout(self.competitions_lists_list, GUI, self.events_names_list)
         self.window = sub_GUI_events_temp.window
-
+        # sub Loop
         while True:
             event, values = self.window.read()
             if type(event) == int:

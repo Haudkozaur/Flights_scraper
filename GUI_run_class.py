@@ -136,5 +136,3 @@ class GUI_run:
             startlisty.get_athletes_lists()
         window['-startlist-'].update(values=startlisty.events_names_list_updated)
         window['See all'].update(button_color='darkgreen')
-
-

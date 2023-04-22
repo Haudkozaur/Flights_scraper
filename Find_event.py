@@ -21,12 +21,9 @@ class Links_Generator():
                 self.events_names_list.append(i.text)
             if self.bowl.find_all('a', class_='roundbutton2x font-12 yellowbut', href=True) != []:
                 for x in self.bowl.find_all('a', class_='roundbutton2x font-12 yellowbut', href=True):
-
                     self.events_results_links_list.append(x['href'])
             else:
                 self.events_results_links_list.append('')
-
-
 
     def get_competitions_urls(self):
         self.competitions_lists_list = []
@@ -55,5 +52,5 @@ class Links_Generator():
                                 self.competitions_list.append([
                                     f'{z.text} K', f'{self.prefix[0]}.domtel-sport.pl/index2.php{z["href"]}'])
             else:
-                self.competitions_list=[]
+                self.competitions_list = []
             self.competitions_lists_list.append(self.competitions_list)
