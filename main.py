@@ -4,6 +4,7 @@ from Find_event import Links_Generator
 import PySimpleGUI as sg
 from Fav_athls import Favourite
 from PZLA_stats import PZLA
+from Start_lists import Start_Lists
 
 sg.theme('DarkTeal10')
 
@@ -21,7 +22,9 @@ stats = PZLA('https://statystyka.pzla.pl/spis_imprez.php?Sezon=',
 stats.create_basic_layout()
 stats.create_basic_layout_domtel()
 
-# stats.get_events_from_athlete_site('https://statystyka.pzla.pl/personal.php?page=profile&nr_zaw=71643&%3Cr=')
+startlisty = Start_Lists('https://starter.pzla.pl/?Typ=888')
+startlisty.produce_basic_layout()
+
 
 class MainWindow:
     def __init__(self, events_names_list, competitions_lists_list):
@@ -34,15 +37,15 @@ class MainWindow:
         for i in range(0, len(self.events_names_list)):
             self.column_1.append([sg.Button(self.events_names_list[i], key=i)])
         self.column_final = [[
-            self.text1,
-            sg.Column(self.column_1, vertical_alignment='top',
+            self.text1],
+            [sg.Column(self.column_1, vertical_alignment='top',
                       key=1)]]
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.column_final, element_justification='center')],
                           [sg.Tab('Athletes', temp.layout, key='-table-')],
                           [sg.Tab('Check recent results', stats.fourth_tab_layout, key='-table-')],
                           [sg.Tab('Advanced searching', stats.third_tab_layout, key='-table-')],
-                          [sg.Tab('Check startlists', [[sg.Text('this section will be avilable in the future')]], key='-table-')]
+                          [sg.Tab('Check startlists', startlisty.fifth_tab_layout, key='-table-')],
 
                           ],
                          tab_location='topleft')]
@@ -101,7 +104,6 @@ class MainWindow:
                 stats.check_if_athl_participated(self.text_input_last_name_PZLA + " " + self.text_input_name_PZLA)
                 stats.produce_layout()
                 self.window['-stats-'].update(values=stats.column_of_events)
-
                 self.window.refresh()
             elif event == 'find_events_PZLA_domtel':
                 self.season = 'Out'
@@ -111,45 +113,86 @@ class MainWindow:
                 self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
                 self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
                 print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
-                temp_fav_object=Favourite()
+                temp_fav_object = Favourite()
                 temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
                 temp_fav_object.find_in_PZLA()
                 stats.get_events_from_athlete_site(temp_fav_object.athl_domtel)
-                stats.get_season_results(stats.years_outdoor_list[-1])
-                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
-                self.window['-years-'].update(visible=True)
-                self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                if stats.years_outdoor_list != []:
+                    stats.get_season_results(stats.years_outdoor_list[-1])
+                    self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                    self.window['-years-'].update(visible=True)
+                    self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                else:
+                    self.window['-stats-domtel-'].update(values=[['no data']])
+                    self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                    self.window.refresh()
+
                 self.window['Outdoor_season'].update(visible=True)
                 self.window['Indoor_season'].update(visible=True)
                 self.window['Choose'].update(visible=True)
                 self.window['Outdoor_season'].update(button_color='darkgreen')
                 self.window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+
             elif event == 'Outdoor_season':
-                self.season='Out'
+                self.season = 'Out'
                 self.window['Outdoor_season'].update(button_color='darkgreen')
                 self.window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
-                stats.get_season_results(stats.years_outdoor_list[-1])
-                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
-                self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                if stats.years_outdoor_list != []:
+                    stats.get_season_results(stats.years_outdoor_list[-1])
+
+                    self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                    self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                else:
+                    self.window['-stats-domtel-'].update(values=[['no data']])
+                    self.window['-years-'].update(values=stats.years_nums_outdoor_list)
+                    self.window.refresh()
+
             elif event == 'Indoor_season':
                 self.season = 'In'
                 self.window['Indoor_season'].update(button_color='darkgreen')
                 self.window['Outdoor_season'].update(button_color=sg.theme_button_color()[1])
-                stats.get_season_results(stats.years_indoor_list[-1])
-                self.window['-stats-domtel-'].update(values=stats.rows_list_full)
-                self.window['-years-'].update(values=stats.years_nums_indoor_list)
-                self.window.refresh()
+                if stats.years_indoor_list != []:
+                    stats.get_season_results(stats.years_indoor_list[-1])
+                    self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+                    self.window['-years-'].update(values=stats.years_nums_indoor_list)
+                    self.window.refresh()
+                else:
+                    self.window['-stats-domtel-'].update(values=[['no data']])
+                    self.window['-years-'].update(values=stats.years_nums_indoor_list)
+                    self.window.refresh()
             elif event == 'Choose':
                 self.selected_option = values['-years-']
-                self.selected_option=int((str(self.selected_option)).replace('[',"").replace(']',""))
+                self.selected_option = int((str(self.selected_option)).replace('[', "").replace(']', ""))
                 print(type(self.selected_option))
                 print(self.selected_option)
-                if self.season=='Out':
+                if self.season == 'Out':
                     stats.get_season_results(stats.outdoor_dictionary[self.selected_option])
                     self.window['-stats-domtel-'].update(values=stats.rows_list_full)
-                elif self.season=='In':
+                elif self.season == 'In':
                     stats.get_season_results(stats.indoor_dictionary[self.selected_option])
                     self.window['-stats-domtel-'].update(values=stats.rows_list_full)
+            elif event == 'find_events_startlist':
+                self.text_input_name_startlist = values['name_startlist']
+                self.text_input_last_name_startlist = values['last_name_startlist']
+                if not hasattr(startlisty, 'startlists_list'):
+                    startlisty.get_incoming_events_list()
+                    startlisty.get_links_to_start_lists()
+                    startlisty.get_athletes_lists()
+                print(self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
+                startlisty.check_if_participated(
+                    self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
+                if startlisty.events_where_will_start!=[]:
+                    self.window['-startlist-'].update(values=startlisty.events_where_will_start)
+                else:
+                    self.window['-startlist-'].update(values=[['no data']])
+                self.window['See all'].update(button_color=sg.theme_button_color()[1])
+            elif event == 'See all':
+                if not hasattr(startlisty, 'startlists_list'):
+                    startlisty.get_incoming_events_list()
+                    startlisty.get_links_to_start_lists()
+                    startlisty.get_athletes_lists()
+                self.window['-startlist-'].update(values=startlisty.events_names_list_updated)
+                self.window['See all'].update(button_color='darkgreen')
             else:
                 self.event = event
                 sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[event])
@@ -205,14 +248,15 @@ class SubWindow:
             self.layout_final = [[sg.Text(
                 'Unfortunately, we are unable to provide information about the results of the selected event')],
                 [sg.Column(self.column_1, vertical_alignment='top', size=(100, 600)),
-            sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
-            sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
-            sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
-            sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
-            sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
-            sg.Column([[sg.Button('back', pad=[[70, 0], [530, 0]])]], element_justification='right', size=(200, 600))
+                 sg.Column(self.column_2, vertical_alignment='top', size=(100, 600)),
+                 sg.Column(self.column_3, vertical_alignment='top', size=(100, 600)),
+                 sg.Column(self.column_4, vertical_alignment='top', size=(100, 600)),
+                 sg.Column(self.column_5, vertical_alignment='top', size=(100, 600)),
+                 sg.Column(self.column_6, vertical_alignment='top', size=(100, 600)),
+                 sg.Column([[sg.Button('back', pad=[[70, 0], [530, 0]])]], element_justification='right',
+                           size=(200, 600))
 
-        ]
+                 ]
             ]
             self.window = sg.Window(self.events_names_list, self.layout_final,
                                     size=(800, 600), resizable=False,
@@ -222,13 +266,10 @@ class SubWindow:
             event, values = self.window.read()
             if type(event) == int:
                 self.chosen_event = event
-                print(self.chosen_event)
-
                 self.window[event].update(button_color='darkgreen')
-                requested_html = requests.get(
-                    last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
                 self.event_name = last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][0]
-                event_results = Table(requested_html, self.event_name,
+                event_results = Table(last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1],
+                                      self.event_name,
                                       last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
                 event_results.get_headers()
                 event_results.get_rows()
