@@ -95,3 +95,5 @@ class Table:
                 self.window.refresh()
 
                 self.sub_windows[event] = temp_object
+
+

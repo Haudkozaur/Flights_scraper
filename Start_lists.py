@@ -49,7 +49,7 @@ class Start_Lists():
         for i in self.events_names_list:
             if (i[2] < (date.today() + self.month)) and (i[2] > date.today()):
                 self.events_names_list_updated.append(i)
-        print(self.events_names_list_updated)
+
 
     def get_links_to_start_lists(self):
         self.links_list = []
@@ -57,7 +57,7 @@ class Start_Lists():
             self.event = get_request(event[4], 'iso-8859-2')
             self.event = self.event.find('a', class_="link", href=True, target="_blank")
             self.links_list.append(f'https://starter.pzla.pl/{self.event["href"]}')
-        print(self.links_list)
+
 
     def get_athletes_lists(self):
         self.startlists_list = []
@@ -69,8 +69,7 @@ class Start_Lists():
                 for athl in cell.find_all('a'):
                     self.startlist.append(athl.text)
             self.startlists_list.append(self.startlist)
-        print(self.startlists_list)
-        print(len(self.startlists_list))
+
 
     def check_if_participated(self, first_last_name):
         self.events_where_will_start = []
