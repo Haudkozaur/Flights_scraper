@@ -1,8 +1,21 @@
 import PySimpleGUI as sg
 from Fav_athls import Favourite
+from input_enocding_func import encode_input
 
 
 class GUI_run:
+
+    def create_first_tab_layout(self, events_names_list):
+        self.text1 = sg.Text("Choose the event you are interested in.")
+        self.column_1 = []
+        for i in range(0, len(events_names_list)):
+            self.column_1.append([sg.Button(events_names_list[i], key=i)])
+        self.column_final = [[
+            self.text1],
+            [sg.Column(self.column_1, vertical_alignment='top',
+                       key=1)]]
+        return self.column_final
+
     def get_atlete_PRs(self, values, temp, window):
         try:
             self.text_input_name = values['name']
@@ -37,17 +50,17 @@ class GUI_run:
             window.refresh()
 
     def advanced_events_searching(self, values, stats, window):
-        self.text_input_name_PZLA = values['name_PZLA']
-        self.text_input_last_name_PZLA = values['last_name_PZLA']
-        self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
-        self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
-        self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
-        stats.find_events()
-        stats.check_if_athl_participated(self.text_input_last_name_PZLA + " " + self.text_input_name_PZLA)
-        stats.produce_layout()
-        window['-stats-'].update(values=stats.column_of_events)
-        window.refresh()
-
+        if hasattr(stats, 'events_list_full'):
+            stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
+            stats.produce_layout()
+            window['-stats-'].update(values=stats.column_of_events)
+            window.refresh()
+        else:
+            stats.find_events()
+            stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
+            stats.produce_layout()
+            window['-stats-'].update(values=stats.column_of_events)
+            window.refresh()
     def find_season_results(self, values, window, stats):
         self.season = 'Out'
         self.text_input_name_PZLA = values['name_PZLA_domtel']

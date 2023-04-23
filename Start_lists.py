@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 import re
 from datetime import date, timedelta
 import PySimpleGUI as sg
@@ -55,7 +54,7 @@ class Start_Lists():
     def get_links_to_start_lists(self):
         self.links_list = []
         for event in self.events_names_list_updated:
-            self.event=get_request(event[4],'iso-8859-2')
+            self.event = get_request(event[4], 'iso-8859-2')
             self.event = self.event.find('a', class_="link", href=True, target="_blank")
             self.links_list.append(f'https://starter.pzla.pl/{self.event["href"]}')
         print(self.links_list)
@@ -64,7 +63,7 @@ class Start_Lists():
         self.startlists_list = []
         for link in self.links_list:
             self.startlist = []
-            self.startlist_html=get_request(link,'iso-8859-2')
+            self.startlist_html = get_request(link, 'iso-8859-2')
             self.startlist_html = self.startlist_html.find_all('td', align="left")
             for cell in self.startlist_html:
                 for athl in cell.find_all('a'):
@@ -106,4 +105,3 @@ class Start_Lists():
                 justification='center',
                 key='-startlist-',
                 row_height=35)]]
-

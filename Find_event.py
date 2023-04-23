@@ -10,7 +10,6 @@ class Links_Generator():
         self.events_links_list = []
         for i in range(0, len(self.events_id_list)):
             self.events_links_list.append(f'https://domtel-sport.pl/{self.events_id_list[i]}')
-        print(self.events_links_list)
 
     def get_events_results_links(self):
         self.events_results_links_list = []

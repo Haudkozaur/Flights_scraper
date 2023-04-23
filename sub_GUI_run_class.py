@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-
+from Table_class import Table
 
 class sub_GUI_run:
     def __init__(self):
@@ -66,3 +66,23 @@ class sub_GUI_run:
                                     size=(800, 600), resizable=False,
                                     grab_anywhere=False,
                                     grab_anywhere_using_control=False, keep_on_top=False, )
+
+    def chose_event(self,event,last_ten_events,GUI):
+        self.chosen_event = event
+        self.window[event].update(button_color='darkgreen')
+        self.event_name = last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][0]
+        event_results = Table(last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1],
+                              self.event_name,
+                              last_ten_events.competitions_lists_list[GUI.event][self.chosen_event][1])
+        event_results.get_headers()
+        event_results.get_rows()
+        event_results.get_competition_steps()
+        event_results.display_table()
+        event_results.Run_table()
+        if hasattr(event_results, 'table_exit'):
+            for key in range(0, self.chosen_event + 1):
+                try:
+                    self.window[key].update(button_color=sg.theme_button_color()[1])
+                except:
+                    pass
+
