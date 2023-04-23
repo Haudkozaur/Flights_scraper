@@ -1,3 +1,4 @@
+from Table_class import Table
 from request_func import get_request
 
 
@@ -53,3 +54,44 @@ class Links_Generator():
             else:
                 self.competitions_list = []
             self.competitions_lists_list.append(self.competitions_list)
+
+
+test = Links_Generator()
+test.get_events_links('https://domtel-sport.pl/wyniki,index,1,all,all,11')
+test.get_events_results_links()
+test.get_competitions_urls()
+
+
+class Third_Searching():
+    def find_events_in_domtel(self, competitions_lists_list):
+        self.competitions_lists_list = competitions_lists_list
+        self.competitions_rankings_list = []
+        for event in self.competitions_lists_list:
+            if event != []:
+                for competition in range(0, len(event)):
+                    self.competitions_rankings_list.append(f'{event[competition][1]}&rank=1')
+        print(self.competitions_rankings_list)
+        self.athletes_in_competitions_list = []
+        for ranking in self.competitions_rankings_list:
+            self.list = get_request(ranking, 'utf-8')
+            self.list = self.list.find('table', class_='Listy')
+            self.list = self.list.find_all('tr')
+            for i in range(1, len(self.list)):
+                self.rows = self.list[i].find_all('td')
+                self.names_last_names_list = []
+                for row in self.rows:
+                    if row.find_all('a', href=True) != []:
+                        self.athletes_in_competitions_list.append([row.text.replace('\n',""), ranking])
+        print(self.athletes_in_competitions_list)
+
+    def check_if_participated(self,first_last_name):
+        self.where_participated=[]
+        for athlete in self.athletes_in_competitions_list:
+            if first_last_name in athlete:
+                self.where_participated.append(athlete)
+        print(self.where_participated)
+
+
+dupa = Third_Searching()
+dupa.find_events_in_domtel(test.competitions_lists_list)
+dupa.check_if_participated('PIETRZAK Waldemar')

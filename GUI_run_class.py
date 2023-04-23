@@ -50,17 +50,13 @@ class GUI_run:
             window.refresh()
 
     def advanced_events_searching(self, values, stats, window):
-        if hasattr(stats, 'events_list_full'):
-            stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
-            stats.produce_layout()
-            window['-stats-'].update(values=stats.column_of_events)
-            window.refresh()
-        else:
+        if not hasattr(stats, 'events_list_full'):
             stats.find_events()
-            stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
-            stats.produce_layout()
-            window['-stats-'].update(values=stats.column_of_events)
-            window.refresh()
+            stats.get_athls_lists()
+        stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
+        stats.produce_layout()
+        window['-stats-'].update(values=stats.column_of_events)
+        window.refresh()
     def find_season_results(self, values, window, stats):
         self.season = 'Out'
         self.text_input_name_PZLA = values['name_PZLA_domtel']

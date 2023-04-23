@@ -33,19 +33,24 @@ class PZLA():
         for j in range(0, len(self.events_names_list)):
             self.events_list_full.append([self.events_names_list[j], self.events_links_list[j]])
 
-    def check_if_athl_participated(self, first_last_name):
-        self.first_last_name = first_last_name
-        self.events_list_full_temp = []
+    def get_athls_lists(self):
+        # self.first_last_name = first_last_name
+        self.first_last_names_list = []
         for event in self.events_list_full:
-            self.first_last_names_list = []
             self.results = get_request(event[1], 'iso-8859-2')
             self.rows_results = self.results.find_all('tr')
             for i in range(0, len(self.rows_results)):
                 for athlete in self.rows_results[i].find_all('td'):
                     for j in athlete.find_all('a', class_='p1', href=True, onclick=True, target='blank'):
-                        self.first_last_names_list.append(j.text)
-            if self.first_last_name in self.first_last_names_list:
-                self.events_list_full_temp.append(event)
+                        self.first_last_names_list.append([j.text,event])
+
+    def check_if_athl_participated(self, first_last_name):
+        self.events_list_full_temp = []
+        self.first_last_name = first_last_name
+        for athl in range(0,len(self.first_last_names_list)):
+            if self.first_last_name in self.first_last_names_list[athl][0] and not self.first_last_names_list[athl][1] in self.events_list_full_temp:
+                self.events_list_full_temp.append(self.first_last_names_list[athl][1])
+
 
     def create_basic_layout(self):
         self.headings = ['event name']
