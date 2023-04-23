@@ -1,5 +1,3 @@
-
-
 import re
 import PySimpleGUI as sg
 from request_func import get_request
@@ -19,7 +17,6 @@ class Favourite:
         self.stew = get_request(
             f'https://statystyka.pzla.pl/baza/?file=Szukaj&zawodnik={self.first_last_name_encoded_part[2]}&zawodnik_imie={self.first_last_name_encoded_part[0]}',
             'utf-8')
-        # self.athl_domtel = ""
         for link in self.stew.find_all('a', class_='p1', href=True):
             self.athl_domtel = (link['href'])
             break
@@ -37,7 +34,7 @@ class Favourite:
 
     def get_empty_table(self):
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
-        self.layout = [
+        self.second_tab_layout = [
             [sg.Text("Enter athletes data to check his/her PR's ")],
             [sg.InputText('athelete name', key='name')],
             [sg.InputText('athelete last name', key='last_name')],
@@ -56,12 +53,7 @@ class Favourite:
 
     def get_athl_site(self):
         self.soup = get_request(self.athl_domtel, 'iso-8859-2')
-        # self.athl_site_html = requests.get(self.athl_domtel)
-        # self.athl_site_html.encoding = 'iso-8859-2'
-        # self.athl_site_html_text = self.athl_site_html.text
-        # self.soup = BeautifulSoup(self.athl_site_html_text, 'lxml')
         self.table = self.soup.find('table', border=0, width="500", cellspacing=False, cellpadding=0, style=False)
-        print(self.table)
         self.cols = self.table.find_all('tr')
         self.rows_list_full = []
         for i in range(3, len(self.cols)):
@@ -73,10 +65,6 @@ class Favourite:
             self.rows_list_full.append(self.rows_list)
         # winter
         self.soup_winter = get_request(self.athl_domtel_winter, 'iso-8859-2')
-        # self.athl_site_winter_html = requests.get(self.athl_domtel_winter)
-        # self.athl_site_winter_html.encoding = 'iso-8859-2'
-        # self.athl_site_winter_html_text = self.athl_site_winter_html.text
-        # self.soup_winter = BeautifulSoup(self.athl_site_winter_html_text, 'lxml')
         self.table_winter = self.soup_winter.find('table', border=0, width="500", cellspacing=False, cellpadding=0,
                                                   style=False)
 

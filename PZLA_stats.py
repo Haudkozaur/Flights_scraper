@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 import PySimpleGUI as sg
 import re
 from request_func import get_request
@@ -22,8 +21,6 @@ class PZLA():
                 self.events_links_list.append(f'https://statystyka.pzla.pl/{event["href"]}')
         for j in range(0, len(self.events_names_list)):
             self.events_list_full.append([self.events_names_list[j], self.events_links_list[j]])
-        print(self.events_list_full)
-        print(len(self.events_list_full))
         self.stats_winter = get_request(self.pzla_stats_winter, 'iso-8859-2')
         self.events_names_list = []
         self.events_links_list = []
@@ -35,8 +32,6 @@ class PZLA():
                 self.events_links_list.append(f'https://statystyka.pzla.pl/{event["href"]}')
         for j in range(0, len(self.events_names_list)):
             self.events_list_full.append([self.events_names_list[j], self.events_links_list[j]])
-        print(self.events_list_full)
-        print(len(self.events_list_full))
 
     def check_if_athl_participated(self, first_last_name):
         self.first_last_name = first_last_name
@@ -49,24 +44,20 @@ class PZLA():
                 for athlete in self.rows_results[i].find_all('td'):
                     for j in athlete.find_all('a', class_='p1', href=True, onclick=True, target='blank'):
                         self.first_last_names_list.append(j.text)
-            print(self.first_last_names_list)
-
             if self.first_last_name in self.first_last_names_list:
                 self.events_list_full_temp.append(event)
-        print(self.events_list_full_temp)
-        print(len(self.events_list_full_temp))
 
     def create_basic_layout(self):
         self.headings = ['event name']
         self.third_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating')],
-            [sg.InputText('athelete name', key='name_PZLA')],
-            [sg.InputText('athelete last name', key='last_name_PZLA')],
+            [sg.InputText('athlete name', key='name_PZLA')],
+            [sg.InputText('athlete last name', key='last_name_PZLA')],
             [sg.Button('Find events')],
             [sg.Table(
                 values=[],
                 headings=self.headings,
-                def_col_width=50,
+                def_col_width=80,
                 auto_size_columns=False,
                 display_row_numbers=False,
                 vertical_scroll_only=False,
@@ -76,17 +67,16 @@ class PZLA():
 
     def produce_layout(self):
         self.column_of_events = []
-
         for i in range(0, len(self.events_list_full_temp)):
-            self.column_of_events.append(self.events_list_full_temp[i][0])
-            # self.dictionary_of_events[self.events_list_full_temp[i][0]] = self.events_list_full_temp[i][1]
+            self.column_of_events.append([self.events_list_full_temp[i][0]])
+        print(self.column_of_events)
 
     def create_basic_layout_domtel(self):
         self.headings = ['competition', 'result', 'date', 'city']
         self.fourth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating this year')],
-            [sg.InputText('athelete name', key='name_PZLA_domtel')],
-            [sg.InputText('athelete last name', key='last_name_PZLA_domtel'),
+            [sg.InputText('athlete name', key='name_PZLA_domtel')],
+            [sg.InputText('athlete last name', key='last_name_PZLA_domtel'),
              sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
              sg.Button("Choose", visible=False)],
             [sg.Button('Find events', key='find_events_PZLA_domtel')],
@@ -106,7 +96,6 @@ class PZLA():
     def get_events_from_athlete_site(self, url):
         self.athl_domtel = url
         self.athl_domtel_season = f'{self.athl_domtel.replace("profile", "sb")}'
-        print(self.athl_domtel_season)
         self.season = get_request(self.athl_domtel_season, 'iso-8859-2')
         self.years = self.season.find('table', border=0, width="500", cellspacing=0, cellpadding=0,
                                       style='border: 1 dotted #A4CFFF')
@@ -141,8 +130,6 @@ class PZLA():
         self.indoor_dictionary = {years_nums_indoor_list: years_indoor_list for
                                   years_nums_indoor_list, years_indoor_list in
                                   zip(self.years_nums_indoor_list, self.years_indoor_list)}
-        print(self.outdoor_dictionary)
-        print(self.indoor_dictionary)
 
     def get_season_results(self, url):
         self.soup = get_request(url, 'iso-8859-2')
@@ -162,4 +149,3 @@ class PZLA():
                 self.rows_list_full[row].pop(2)
             except:
                 pass
-
