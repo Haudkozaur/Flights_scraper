@@ -2,7 +2,7 @@ import re
 from datetime import date, timedelta
 import PySimpleGUI as sg
 from request_func import get_request
-
+from Add_To_Favourites import create_hints_lists
 
 class Start_Lists():
     def __init__(self, url):
@@ -88,11 +88,13 @@ class Start_Lists():
 
     def produce_basic_layout(self):
         self.headings = ['Event', 'Localization', 'Date']
-
+        self.menu = ['menu', create_hints_lists()]
         self.fifth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he will be participating during incoming month')],
-            [sg.InputText('athelete name', key='name_startlist')],
-            [sg.InputText('athelete last name', key='last_name_startlist')],
+            [sg.InputText('athelete name', key='name_startlist'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+            [sg.InputText('athelete last name', key='last_name_startlist'),
+             sg.Button('Add to Favourites', key='-add_athl4-')],
             [sg.Button('Find events', key='find_events_startlist'), sg.Button('See all')],
             [sg.Table(
                 values=[],

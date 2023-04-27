@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import re
 from request_func import get_request
-
+from Add_To_Favourites import create_hints_lists
 
 class PZLA():
     def __init__(self, url, url_winter):
@@ -53,11 +53,14 @@ class PZLA():
 
 
     def create_basic_layout(self):
+        self.menu = ['menu', create_hints_lists()]
         self.headings = ['event name']
         self.third_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating')],
-            [sg.InputText('athlete name', key='name_PZLA')],
-            [sg.InputText('athlete last name', key='last_name_PZLA')],
+            [sg.InputText('athlete name', key='name_PZLA'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+            [sg.InputText('athlete last name', key='last_name_PZLA'),
+             sg.Button('Add to Favourites', key='-add_athl2-')],
             [sg.Button('Find events')],
             [sg.Table(
                 values=[],
@@ -78,13 +81,18 @@ class PZLA():
 
     def create_basic_layout_domtel(self):
         self.headings = ['competition', 'result', 'date', 'city']
+        self.menu = ['menu', create_hints_lists()]
         self.fourth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating this year')],
-            [sg.InputText('athlete name', key='name_PZLA_domtel')],
+            [sg.InputText('athlete name', key='name_PZLA_domtel'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
             [sg.InputText('athlete last name', key='last_name_PZLA_domtel'),
+             sg.Button('Add to Favourites', key='-add_athl3-')
+             ],
+            [sg.Button('Find events', key='find_events_PZLA_domtel'),sg.Text('                                                         '),
              sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
-             sg.Button("Choose", visible=False)],
-            [sg.Button('Find events', key='find_events_PZLA_domtel')],
+             sg.Button("Choose", visible=False)
+             ],
             [sg.Button('Outdoor', visible=False, key='Outdoor_season'),
              sg.Button('Indoor', visible=False, key='Indoor_season')],
             [sg.Table(
