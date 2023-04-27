@@ -6,7 +6,6 @@ from Start_lists import Start_Lists
 from GUI_run_class import GUI_run
 from sub_GUI_run_class import sub_GUI_run
 from Third_searching import Third_Searching
-from input_encoding_func import encode_input
 from Add_To_Favourites import Add_To_Fav
 
 sg.theme('DarkTeal10')
@@ -57,10 +56,16 @@ class MainWindow:
                                 grab_anywhere_using_control=False, keep_on_top=False)
 
     def run(self):
+
+        class MyStr(str):
+            def __eq__(self, other):
+                return self.__contains__(other)
+
         # Main loop
         while True:
 
             event, values = self.window.read()
+
             print(event)
             match event:
                 case sg.WIN_CLOSED:
@@ -88,15 +93,23 @@ class MainWindow:
                     GUI_events.show_all_startlists(startlisty, self.window)
                 case 'find_events_recent':
                     GUI_events.find_and_display_recent_results(third_searching, last_ten_events, values, self.window)
-                case '-add_athl1-' | '-add_athl2-' | '-add_athl3-' | '-add_athl4-' | '-add_athl5-':
-                    favourite = Add_To_Fav()
-                    favourite.get_active_tab_and_add_to_fav(self.window['-tabgroup-'].get(), values)
+
                 case '-TABLE-':
+                    # potem się przyda
                     print(self.window['-TABLE-'].get())
+                    print(str(values['-TABLE-']))
                 case int():
                     self.event = event
                     sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
                     self.sub_windows[event] = sub_window
+                case _:
+                    favourite = Add_To_Fav(self.window['-tabgroup-'].get(), values)
+                    self.event_str = MyStr(str(event))
+                    match self.event_str:
+                        case '-add_athl':
+                            favourite.get_active_tab_and_add_to_fav()
+                        case '-tab_menu':
+                            favourite.fill_the_textboxes_and_find(self.window, event)
 
 
 class SubWindow:

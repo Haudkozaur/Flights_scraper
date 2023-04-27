@@ -3,7 +3,9 @@ from input_encoding_func import encode_input
 
 
 class Add_To_Fav():
-    def __init__(self):
+    def __init__(self, active_tab, values):
+        self.active_tab = active_tab
+        self.values = values
         self.filename = 'fav.txt'
         self.filepath = os.path.abspath(self.filename)
         self.tab_keys_dict = {'-tab2-': ['name', 'last_name'],
@@ -12,23 +14,22 @@ class Add_To_Fav():
                               '-tab5-': ['name_startlist', 'last_name_startlist'],
                               '-tab6-': ['name_recent', 'last_name_recent']}
 
-
-    def get_active_tab_and_add_to_fav(self, active_tab, values):
-        match active_tab:
+    def get_active_tab_and_add_to_fav(self):
+        match self.active_tab:
             case '-tab2-':
-                self.first_last_name = encode_input(values, self.tab_keys_dict['-tab2-'][0],
+                self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab2-'][0],
                                                     self.tab_keys_dict['-tab2-'][1])
             case '-tab3-':
-                self.first_last_name = encode_input(values, self.tab_keys_dict['-tab3-'][0],
+                self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab3-'][0],
                                                     self.tab_keys_dict['-tab3-'][1])
             case '-tab4-':
-                self.first_last_name = encode_input(values, self.tab_keys_dict['-tab4-'][0],
+                self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab4-'][0],
                                                     self.tab_keys_dict['-tab4-'][1])
             case '-tab5-':
-                self.first_last_name = encode_input(values, self.tab_keys_dict['-tab5-'][0],
+                self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab5-'][0],
                                                     self.tab_keys_dict['-tab5-'][1])
             case '-tab6-':
-                self.first_last_name = encode_input(values, self.tab_keys_dict['-tab6-'][0],
+                self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab6-'][0],
                                                     self.tab_keys_dict['-tab6-'][1])
         if os.path.isfile(self.filepath):
             with open(self.filepath, "r", encoding='utf-8') as f:
@@ -46,6 +47,26 @@ class Add_To_Fav():
 
             print('Fav-folder created, athlete added')
 
+    def fill_the_textboxes_and_find(self, window, event):
+        self.first_last_name = self.values[event].partition(" ")
+        match self.active_tab:
+            case '-tab2-':
+                window[self.tab_keys_dict['-tab2-'][0]].update(self.first_last_name[2])
+                window[self.tab_keys_dict['-tab2-'][1]].update(self.first_last_name[0])
+            case '-tab3-':
+                window[self.tab_keys_dict['-tab3-'][0]].update(self.first_last_name[2])
+                window[self.tab_keys_dict['-tab3-'][1]].update(self.first_last_name[0])
+            case '-tab4-':
+                window[self.tab_keys_dict['-tab4-'][0]].update(self.first_last_name[2])
+                window[self.tab_keys_dict['-tab4-'][1]].update(self.first_last_name[0])
+            case '-tab5-':
+                window[self.tab_keys_dict['-tab5-'][0]].update(self.first_last_name[2])
+                window[self.tab_keys_dict['-tab5-'][1]].update(self.first_last_name[0])
+            case '-tab6-':
+                window[self.tab_keys_dict['-tab6-'][0]].update(self.first_last_name[2])
+                window[self.tab_keys_dict['-tab6-'][1]].update(self.first_last_name[0])
+
+
 def create_hints_lists():
     with open('fav.txt', 'r', encoding='utf-8') as f:
         options_all = [line.strip() for line in f]
@@ -58,5 +79,3 @@ def create_hints_lists():
     print(options_name)
     print(options_last_name)
     return options_all
-
-
