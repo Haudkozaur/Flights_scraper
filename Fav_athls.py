@@ -1,6 +1,7 @@
 import re
 import PySimpleGUI as sg
 from request_func import get_request
+from Add_To_Favourites import create_hints_lists
 
 
 class Favourite:
@@ -34,10 +35,13 @@ class Favourite:
 
     def get_empty_table(self):
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
+        self.menu=['menu',create_hints_lists()]
         self.second_tab_layout = [
             [sg.Text("Enter athletes data to check his/her PR's ")],
-            [sg.InputText('athelete name', key='name')],
-            [sg.InputText('athelete last name', key='last_name')],
+            [sg.InputText('athlete name', key='name'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+            [sg.InputText('athlete last name', key='last_name'),
+             sg.Button('Add to Favourites', key='-add_athl1-')],
             [sg.Button('Submit')],
             [sg.Button('Outdoor', visible=False), sg.Button('Indoor', visible=False)],
             [sg.Table(
@@ -49,7 +53,8 @@ class Favourite:
                 vertical_scroll_only=False,
                 justification='center',
                 key='-TABLE-',
-                row_height=35)]]
+                row_height=35,
+                enable_events=True)]]
 
     def get_athl_site(self):
         self.soup = get_request(self.athl_domtel, 'iso-8859-2')

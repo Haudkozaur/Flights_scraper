@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 from Fav_athls import Favourite
-from input_enocding_func import encode_input
+from input_encoding_func import encode_input
 
 
 class GUI_run:
@@ -57,6 +57,7 @@ class GUI_run:
         stats.produce_layout()
         window['-stats-'].update(values=stats.column_of_events)
         window.refresh()
+
     def find_season_results(self, values, window, stats):
         self.season = 'Out'
         self.text_input_name_PZLA = values['name_PZLA_domtel']
@@ -145,3 +146,10 @@ class GUI_run:
             startlisty.get_athletes_lists()
         window['-startlist-'].update(values=startlisty.events_names_list_updated)
         window['See all'].update(button_color='darkgreen')
+
+    def find_and_display_recent_results(self, third_searching, last_ten_events, values, window):
+        if not hasattr(third_searching, 'athletes_in_competitions_list'):
+            third_searching.find_events_in_domtel(last_ten_events.competitions_lists_list)
+        third_searching.check_if_participated(encode_input(values, 'name_recent', 'last_name_recent'))
+        third_searching.reverse_links_generator(last_ten_events.events_dict)
+        window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
