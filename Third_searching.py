@@ -67,9 +67,9 @@ class Third_Searching():
         self.sixth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he will be participating recently')],
             [sg.InputText('athlete name', key='name_recent'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-', size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name_recent'),
-             sg.Button('Add to Favourites', key='-add_athl5-')],
+             sg.Button('Add to Favourites', key='-add_athl5-', size=[18, 1])],
             [sg.Button('Find events', key='find_events_recent')],
             [sg.Table(
                 values=[],
@@ -82,14 +82,3 @@ class Third_Searching():
                 key='-THIRD_TABLE-',
                 row_height=35)]]
 
-    # def create_layout(self):
-    #     self.column = []
-    #     for i in range(0, len(self.layout_list_full)):
-    #         self.column.append([sg.Button(self.layout_list_full[i][1], key=f'{self.layout_list_full[i][1]}')])
-
-
-
-# dupa = Third_Searching()
-# dupa.find_events_in_domtel(test.competitions_lists_list)
-# dupa.check_if_participated('KOMAŃSKI Albert')
-# dupa.reverse_links_generator(test.events_dict)

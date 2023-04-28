@@ -58,9 +58,9 @@ class PZLA():
         self.third_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating')],
             [sg.InputText('athlete name', key='name_PZLA'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-',size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name_PZLA'),
-             sg.Button('Add to Favourites', key='-add_athl2-')],
+             sg.Button('Add to Favourites', key='-add_athl2-',size=[18, 1])],
             [sg.Button('Find events')],
             [sg.Table(
                 values=[],
@@ -85,9 +85,9 @@ class PZLA():
         self.fourth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating this year')],
             [sg.InputText('athlete name', key='name_PZLA_domtel'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-', size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name_PZLA_domtel'),
-             sg.Button('Add to Favourites', key='-add_athl3-')
+             sg.Button('Add to Favourites', key='-add_athl3-', size=[18, 1])
              ],
             [sg.Button('Find events', key='find_events_PZLA_domtel'),sg.Text('                                                         '),
              sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
