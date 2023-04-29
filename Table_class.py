@@ -66,6 +66,7 @@ class Table:
 
             if event == sg.WIN_CLOSED:
                 self.window.close()
+                self.table_exit = True
                 break
             if type(event) == int:
 

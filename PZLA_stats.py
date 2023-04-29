@@ -3,6 +3,7 @@ import re
 from request_func import get_request
 from Add_To_Favourites import create_hints_lists
 
+
 class PZLA():
     def __init__(self, url, url_winter):
         self.pzla_stats = url
@@ -42,26 +43,28 @@ class PZLA():
             for i in range(0, len(self.rows_results)):
                 for athlete in self.rows_results[i].find_all('td'):
                     for j in athlete.find_all('a', class_='p1', href=True, onclick=True, target='blank'):
-                        self.first_last_names_list.append([j.text,event])
+                        self.first_last_names_list.append([j.text, event])
         print(self.first_last_names_list)
+
     def check_if_athl_participated(self, first_last_name):
         self.events_list_full_temp = []
         self.first_last_name = first_last_name
-        for athl in range(0,len(self.first_last_names_list)):
-            if self.first_last_name in self.first_last_names_list[athl][0] and not self.first_last_names_list[athl][1] in self.events_list_full_temp:
+        for athl in range(0, len(self.first_last_names_list)):
+            if self.first_last_name in self.first_last_names_list[athl][0] and not self.first_last_names_list[athl][
+                                                                                       1] in self.events_list_full_temp:
                 self.events_list_full_temp.append(self.first_last_names_list[athl][1])
-
 
     def create_basic_layout(self):
         self.menu = ['menu', create_hints_lists()]
         self.headings = ['event name']
         self.third_tab_layout = [
-            [sg.Text('Insert athletes data to find events in which he was participating')],
-            [sg.InputText('athlete name', key='name_PZLA'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu2-',size=[20, 1])],
-            [sg.InputText('athlete last name', key='last_name_PZLA'),
-             sg.Button('Add to Favourites', key='-add_athl2-',size=[18, 1])],
-            [sg.Button('Find events')],
+            [sg.Text("Enter an athlete's details to find events in which they were participating this year")],
+            [sg.InputText('name', key='name_PZLA'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu2-', size=(20, 1))],
+            [sg.InputText('last name', key='last_name_PZLA'),
+             sg.Button('Add to Favourites', key='-add_athl2-', size=(18, 1)),sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu2-', size=(20, 1))],
+            [sg.Button('Find events', size=(39, 1))],
+            [sg.Text('Click on an event to go to the results website.', visible=False, key='-click_text2-')],
             [sg.Table(
                 values=[],
                 headings=self.headings,
@@ -84,18 +87,20 @@ class PZLA():
         self.headings = ['competition', 'result', 'date', 'city']
         self.menu = ['menu', create_hints_lists()]
         self.fourth_tab_layout = [
-            [sg.Text('Insert athletes data to find events in which he was participating this year')],
-            [sg.InputText('athlete name', key='name_PZLA_domtel'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu3-', size=[20, 1])],
-            [sg.InputText('athlete last name', key='last_name_PZLA_domtel'),
-             sg.Button('Add to Favourites', key='-add_athl3-', size=[18, 1])
+            [sg.Text("Enter an athlete's details to find events in which he was participating during the seasons")],
+            [sg.InputText('name', key='name_PZLA_domtel'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu3-', size=(20, 1))],
+            [sg.InputText('last name', key='last_name_PZLA_domtel'),
+             sg.Button('Add to Favourites', key='-add_athl3-', size=(18, 1)),
+             sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu3-', size=(20, 1))
              ],
-            [sg.Button('Find events', key='find_events_PZLA_domtel'),sg.Text('                                                         '),
+            [sg.Button('Find events', key='find_events_PZLA_domtel', size=(39, 1)),
+
              sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
-             sg.Button("Choose", visible=False)
+             sg.Button("Choose", visible=False, key="Choose")
              ],
-            [sg.Button('Outdoor', visible=False, key='Outdoor_season'),
-             sg.Button('Indoor', visible=False, key='Indoor_season')],
+            [sg.Button('Outdoor', visible=False, key='Outdoor_season',size=(7, 1)),
+             sg.Button('Indoor', visible=False, key='Indoor_season',size=(7, 1))],
             [sg.Table(
                 values=[],
                 headings=self.headings,
@@ -106,7 +111,7 @@ class PZLA():
                 justification='center',
                 key='-TABLE_stats-domtel-',
                 row_height=35,
-                )]]
+            )]]
 
     def get_events_from_athlete_site(self, url):
         self.athl_domtel = url

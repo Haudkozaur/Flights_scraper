@@ -37,13 +37,15 @@ class Favourite:
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
         self.menu = ['menu', create_hints_lists()]
         self.second_tab_layout = [
-            [sg.Text("Enter athletes data to check his/her PR's ")],
-            [sg.InputText('athlete name', key='name'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu1-', size=[20, 1])],
-            [sg.InputText('athlete last name', key='last_name'),
-             sg.Button('Add to Favourites', key='-add_athl1-', size=[18, 1])],
-            [sg.Button('Submit')],
-            [sg.Button('Outdoor', visible=False), sg.Button('Indoor', visible=False)],
+            [sg.Text("Enter an athlete's details to check their PR's")],
+            [sg.InputText('name', key='name', size=(45, 1)),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu1-', size=(20, 1))],
+            [sg.InputText('last name', key='last_name', size=(45, 1)),
+             sg.Button('Add to Favourites', key='-add_athl1-', size=(18, 1)),
+             sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu1-', size=(20, 1))],
+            [sg.Button("Find PR's", key='Submit', size=(39, 1))],
+            [sg.Button('Outdoor', visible=False, key='Outdoor', size=(7, 1)),
+             sg.Button('Indoor', visible=False, key='Indoor', size=(7, 1))],
             [sg.Table(
                 values=[],
                 headings=self.headings_list,
@@ -54,7 +56,7 @@ class Favourite:
                 justification='center',
                 key='-TABLE-',
                 row_height=35
-                )]]
+            )]]
 
     def get_athl_site(self):
         self.soup = get_request(self.athl_domtel, 'iso-8859-2')
