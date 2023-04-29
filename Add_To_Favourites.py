@@ -13,8 +13,9 @@ class Add_To_Fav():
                               '-tab4-': ['name_PZLA', 'last_name_PZLA'],
                               '-tab5-': ['name_startlist', 'last_name_startlist'],
                               '-tab6-': ['name_recent', 'last_name_recent']}
+        self.tab_menus_list = ['-tab_menu1-', '-tab_menu2-', '-tab_menu3-', '-tab_menu4-', '-tab_menu5-']
 
-    def get_active_tab_and_add_to_fav(self):
+    def get_active_tab_and_add_to_fav(self, window):
         match self.active_tab:
             case '-tab2-':
                 self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab2-'][0],
@@ -41,10 +42,13 @@ class Add_To_Fav():
                     with open(self.filepath, "a", encoding='utf-8') as f:
                         f.write(str(self.first_last_name) + "\n")
                     print('Added to Fav')
+                    for menu in self.tab_menus_list:
+                        window[menu].update(['menu', create_hints_lists()])
         else:
             with open(self.filepath, "w", encoding='utf-8') as f:
                 f.write(str(self.first_last_name) + "\n")
-
+            for menu in self.tab_menus_list:
+                window[menu].update(['menu', create_hints_lists()])
             print('Fav-folder created, athlete added')
 
     def fill_the_textboxes_and_find(self, window, event):
@@ -53,18 +57,23 @@ class Add_To_Fav():
             case '-tab2-':
                 window[self.tab_keys_dict['-tab2-'][0]].update(self.first_last_name[2])
                 window[self.tab_keys_dict['-tab2-'][1]].update(self.first_last_name[0])
+
             case '-tab3-':
                 window[self.tab_keys_dict['-tab3-'][0]].update(self.first_last_name[2])
                 window[self.tab_keys_dict['-tab3-'][1]].update(self.first_last_name[0])
+
             case '-tab4-':
                 window[self.tab_keys_dict['-tab4-'][0]].update(self.first_last_name[2])
                 window[self.tab_keys_dict['-tab4-'][1]].update(self.first_last_name[0])
+
             case '-tab5-':
                 window[self.tab_keys_dict['-tab5-'][0]].update(self.first_last_name[2])
                 window[self.tab_keys_dict['-tab5-'][1]].update(self.first_last_name[0])
+
             case '-tab6-':
                 window[self.tab_keys_dict['-tab6-'][0]].update(self.first_last_name[2])
                 window[self.tab_keys_dict['-tab6-'][1]].update(self.first_last_name[0])
+
 
 
 def create_hints_lists():
@@ -75,7 +84,4 @@ def create_hints_lists():
         for option in options_all:
             options_name.append((option.partition(" "))[2])
             options_last_name.append((option.partition(" "))[0])
-    print(options_all)
-    print(options_name)
-    print(options_last_name)
     return options_all

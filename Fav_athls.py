@@ -35,13 +35,13 @@ class Favourite:
 
     def get_empty_table(self):
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']
-        self.menu=['menu',create_hints_lists()]
+        self.menu = ['menu', create_hints_lists()]
         self.second_tab_layout = [
             [sg.Text("Enter athletes data to check his/her PR's ")],
             [sg.InputText('athlete name', key='name'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-')],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu1-', size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name'),
-             sg.Button('Add to Favourites', key='-add_athl1-')],
+             sg.Button('Add to Favourites', key='-add_athl1-', size=[18, 1])],
             [sg.Button('Submit')],
             [sg.Button('Outdoor', visible=False), sg.Button('Indoor', visible=False)],
             [sg.Table(
@@ -53,8 +53,8 @@ class Favourite:
                 vertical_scroll_only=False,
                 justification='center',
                 key='-TABLE-',
-                row_height=35,
-                enable_events=True)]]
+                row_height=35
+                )]]
 
     def get_athl_site(self):
         self.soup = get_request(self.athl_domtel, 'iso-8859-2')

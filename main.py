@@ -93,11 +93,8 @@ class MainWindow:
                     GUI_events.show_all_startlists(startlisty, self.window)
                 case 'find_events_recent':
                     GUI_events.find_and_display_recent_results(third_searching, last_ten_events, values, self.window)
-
-                case '-TABLE-':
-                    # potem się przyda
-                    print(self.window['-TABLE-'].get())
-                    print(str(values['-TABLE-']))
+                # case '-TABLE-':
+                # potem się przyda
                 case int():
                     self.event = event
                     sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
@@ -107,9 +104,14 @@ class MainWindow:
                     self.event_str = MyStr(str(event))
                     match self.event_str:
                         case '-add_athl':
-                            favourite.get_active_tab_and_add_to_fav()
+                            favourite.get_active_tab_and_add_to_fav(self.window)
                         case '-tab_menu':
                             favourite.fill_the_textboxes_and_find(self.window, event)
+                        case 'TABLE':
+
+                            GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
+                                                         third_searching)
+                            print(str(values[event]))
 
 
 class SubWindow:
