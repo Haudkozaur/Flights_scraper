@@ -5,7 +5,11 @@ import webbrowser
 from Table_class import Table
 
 
+
 class GUI_run:
+    def __init__(self):
+        self.waiting_prompt = [['Program is collecting data. This may take a few minutes...']]
+        self.no_data_prompt = [['No event found.']]
 
     def create_first_tab_layout(self, events_names_list):
         self.text1 = sg.Text("Choose the event you are interested in.")
@@ -52,12 +56,18 @@ class GUI_run:
             window.refresh()
 
     def advanced_events_searching(self, values, stats, window):
+        window['-TABLE_stats-'].update(
+            values=self.waiting_prompt)
         if not hasattr(stats, 'events_list_full'):
             stats.find_events()
             stats.get_athls_lists()
         stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
         stats.produce_layout()
-        window['-TABLE_stats-'].update(values=stats.column_of_events)
+        if stats.column_of_events != []:
+            window['-TABLE_stats-'].update(values=stats.column_of_events)
+            window['-click_text2-'].update(visible=True)
+        else:
+            window['-TABLE_stats-'].update(values=self.no_data_prompt)
         print(stats.column_of_events)
         window.refresh()
 
@@ -135,6 +145,9 @@ class GUI_run:
             window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
 
     def get_startlists(self, values, startlisty, window):
+        self.see_all = False
+        window['-TABLE_startlist-'].update(
+            values=self.waiting_prompt)
         self.text_input_name_startlist = values['name_startlist']
         self.text_input_last_name_startlist = values['last_name_startlist']
         if not hasattr(startlisty, 'startlists_list'):
@@ -146,44 +159,54 @@ class GUI_run:
             self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
         if startlisty.events_where_will_start != []:
             window['-TABLE_startlist-'].update(values=startlisty.events_where_will_start)
+            window['-click_text4-'].update(visible=True)
         else:
-            window['-TABLE_startlist-'].update(values=[['no data']])
+            window['-TABLE_startlist-'].update(values=self.no_data_prompt)
         window['See all'].update(button_color=sg.theme_button_color()[1])
-        self.see_all=False
 
     def show_all_startlists(self, startlisty, window):
+        self.see_all = True
+        window['-TABLE_startlist-'].update(
+            values=self.waiting_prompt)
         if not hasattr(startlisty, 'startlists_list'):
             startlisty.get_incoming_events_list()
             startlisty.get_links_to_start_lists()
             startlisty.get_athletes_lists()
         window['-TABLE_startlist-'].update(values=startlisty.events_names_list_updated)
+        window['-click_text4-'].update(visible=True)
         window['See all'].update(button_color='darkgreen')
-        self.see_all = True
 
     def find_and_display_recent_results(self, third_searching, last_ten_events, values, window):
+        window['-THIRD_TABLE-'].update(values=[["", self.waiting_prompt[0][0]]])
         if not hasattr(third_searching, 'athletes_in_competitions_list'):
             third_searching.find_events_in_domtel(last_ten_events.competitions_lists_list)
         third_searching.check_if_participated(encode_input(values, 'name_recent', 'last_name_recent'))
         third_searching.reverse_links_generator(last_ten_events.events_dict)
-        window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
+        if third_searching.layout_list_full != []:
+            window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
+            window['-click_text3-'].update(visible=True)
+        else:
+            window['-THIRD_TABLE-'].update(values=[["", self.no_data_prompt[0][0]]])
 
-    def browse_for_result(self, active_tab, event, stats, third_searching,startlisty):
+    def browse_for_result(self, active_tab, event, stats, third_searching, startlisty):
         if event != []:
             match active_tab:
                 case '-tab4-':
-                    webbrowser.open(stats.column_of_events[int(event[0])][1])
+                    if hasattr(stats, 'column_of_events'):
+                        webbrowser.open(stats.column_of_events[int(event[0])][1])
                 case '-tab6-':
-                    temp_table = Table(third_searching.layout_list_full[int(event[0])][0],
-                                       third_searching.layout_list_full[int(event[0])][1],
-                                       third_searching.layout_list_full[int(event[0])][0])
-                    temp_table.get_headers()
-                    temp_table.get_rows()
-                    # temp_table.get_competition_steps()
-                    temp_table.display_table()
-                    temp_table.Run_table()
+                    if hasattr(third_searching, 'layout_list_full'):
+                        if third_searching.layout_list_full != []:
+                            temp_table = Table(third_searching.layout_list_full[int(event[0])][0],
+                                               third_searching.layout_list_full[int(event[0])][1],
+                                               third_searching.layout_list_full[int(event[0])][0])
+                            temp_table.get_headers()
+                            temp_table.get_rows()
+                            # temp_table.get_competition_steps()
+                            temp_table.display_table()
+                            temp_table.Run_table()
                 case '-tab5-':
-                    if self.see_all:
+                    if self.see_all and hasattr(startlisty, 'events_names_list_updated'):
                         webbrowser.open(startlisty.events_names_list_updated[int(event[0])][-1])
-                    else:
+                    elif hasattr(startlisty, 'events_where_will_start'):
                         webbrowser.open(startlisty.events_where_will_start[int(event[0])][-1])
-

@@ -8,6 +8,9 @@ from sub_GUI_run_class import sub_GUI_run
 from Third_searching import Third_Searching
 from Add_To_Favourites import Add_To_Fav
 
+import threading
+
+
 sg.theme('DarkTeal10')
 
 last_ten_events = Links_Generator()
@@ -37,7 +40,6 @@ class MainWindow:
         self.events_names_list = events_names_list
         self.competitions_lists_list = competitions_lists_list
         self.first_tab_layout = GUI_events.create_first_tab_layout(self.events_names_list)
-
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.first_tab_layout, key='-tab1-')],
                           [sg.Tab("Athletes PR's", temp.second_tab_layout, key='-tab2-')],
@@ -77,7 +79,8 @@ class MainWindow:
                 case 'Indoor':
                     GUI_events.choose_indoor(temp, self.window)
                 case 'Find events':
-                    GUI_events.advanced_events_searching(values, stats, self.window)
+                    threading.Thread(target=GUI_events.advanced_events_searching, args=(values, stats, self.window),
+                                     daemon=True).start()
                 case 'find_events_PZLA_domtel':
                     GUI_events.find_season_results(values, self.window, stats)
                 case 'Outdoor_season':
@@ -87,13 +90,14 @@ class MainWindow:
                 case 'Choose':
                     GUI_events.change_year(values, self.window, stats)
                 case 'find_events_startlist':
-                    GUI_events.get_startlists(values, startlisty, self.window)
+                    threading.Thread(target=GUI_events.get_startlists, args=(values, startlisty, self.window),
+                                     daemon=True).start()
                 case 'See all':
-                    GUI_events.show_all_startlists(startlisty, self.window)
+                    threading.Thread(target=GUI_events.show_all_startlists, args=(startlisty, self.window),
+                                     daemon=True).start()
                 case 'find_events_recent':
-                    GUI_events.find_and_display_recent_results(third_searching, last_ten_events, values, self.window)
-                # case '-TABLE-':
-                # potem się przyda
+                    threading.Thread(target=GUI_events.find_and_display_recent_results,
+                                     args=(third_searching, last_ten_events, values, self.window), daemon=True).start()
                 case int():
                     self.event = event
                     sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
@@ -103,15 +107,16 @@ class MainWindow:
                     self.event_str = MyStr(str(event))
                     match self.event_str:
                         case '-add_athl':
-                            favourite.get_active_tab_and_add_to_fav(self.window)
+                            favourite.get_active_tab_and_add_to_fav(self.window, temp)
                         case '-tab_menu':
                             favourite.fill_the_textboxes_and_find(self.window, event)
                         case 'TABLE':
                             GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
-                                                         third_searching,startlisty)
+                                                         third_searching, startlisty)
                             print(str(values[event]))
                         case '-del_menu':
                             favourite.get_active_tab_and_del_from_fav(self.window, event)
+
 
 class SubWindow:
     def __init__(self, title, competitions_lists_list, events_names_list):

@@ -17,7 +17,7 @@ class Add_To_Fav():
         self.tab_menus_list = ['-tab_menu1-', '-tab_menu2-', '-tab_menu3-', '-tab_menu4-', '-tab_menu5-', '-del_menu1-',
                                '-del_menu2-', '-del_menu3-', '-del_menu4-', '-del_menu5-']
 
-    def get_active_tab_and_add_to_fav(self, window):
+    def get_active_tab_and_add_to_fav(self, window, temp):
         match self.active_tab:
             case '-tab2-':
                 self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab2-'][0],
@@ -34,27 +34,36 @@ class Add_To_Fav():
             case '-tab6-':
                 self.first_last_name = encode_input(self.values, self.tab_keys_dict['-tab6-'][0],
                                                     self.tab_keys_dict['-tab6-'][1])
-        if os.path.isfile(self.filepath):
-            with open(self.filepath, "r", encoding='utf-8') as f:
-                self.file_content = f.read()
-                if str(self.first_last_name) in self.file_content:
-                    sg.popup('Already in Favourites')
+        try:
+            self.text_input_name = (self.first_last_name.partition(" "))[2]
+            self.text_input_last_name = (self.first_last_name.partition(" "))[0]
+            print(self.text_input_name + " " + self.text_input_last_name)
+            temp.encode(self.text_input_name + " " + self.text_input_last_name)
+            temp.find_in_PZLA()
+            temp.get_athl_site()
 
-                else:
-                    with open(self.filepath, "a", encoding='utf-8') as f:
-                        f.write(str(self.first_last_name) + "\n")
-                    print('Added to Favourites')
-                    sg.popup('Added to Favourites')
-                    for menu in self.tab_menus_list:
-                        window[menu].update(['menu', create_hints_lists()])
-        else:
-            with open(self.filepath, "w", encoding='utf-8') as f:
-                f.write(str(self.first_last_name) + "\n")
-            for menu in self.tab_menus_list:
-                window[menu].update(['menu', create_hints_lists()])
-            print('Favourites-folder created, athlete added')
-            sg.popup('Added to Favourites')
+            if os.path.isfile(self.filepath):
+                with open(self.filepath, "r", encoding='utf-8') as f:
+                    self.file_content = f.read()
+                    if str(self.first_last_name) in self.file_content:
+                        sg.popup('Already in Favourites')
 
+                    else:
+                        with open(self.filepath, "a", encoding='utf-8') as f:
+                            f.write(str(self.first_last_name) + "\n")
+                        print('Added to Favourites')
+                        sg.popup('Added to Favourites')
+                        for menu in self.tab_menus_list:
+                            window[menu].update(['menu', create_hints_lists()])
+            else:
+                with open(self.filepath, "w", encoding='utf-8') as f:
+                    f.write(str(self.first_last_name) + "\n")
+                for menu in self.tab_menus_list:
+                    window[menu].update(['menu', create_hints_lists()])
+                print('Favourites-folder created, athlete added')
+                sg.popup('Added to Favourites')
+        except:
+            sg.popup('Enter the correct data.')
     def fill_the_textboxes_and_find(self, window, event):
         self.first_last_name = self.values[event].partition(" ")
         match self.active_tab:

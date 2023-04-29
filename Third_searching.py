@@ -96,6 +96,7 @@ class Third_Searching():
              sg.Button('Add to Favourites', key='-add_athl5-', size=(18, 1)),
              sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu5-', size=(20, 1))],
             [sg.Button('Find events', key='find_events_recent', size=(39, 1))],
+            [sg.Text('Click on an event to see full results.',visible=False,key='-click_text3-')],
             [sg.Table(
                 values=[],
                 headings=['', 'event'],

@@ -64,6 +64,7 @@ class PZLA():
             [sg.InputText('last name', key='last_name_PZLA'),
              sg.Button('Add to Favourites', key='-add_athl2-', size=(18, 1)),sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu2-', size=(20, 1))],
             [sg.Button('Find events', size=(39, 1))],
+            [sg.Text('Click on an event to go to the results website.', visible=False, key='-click_text2-')],
             [sg.Table(
                 values=[],
                 headings=self.headings,
