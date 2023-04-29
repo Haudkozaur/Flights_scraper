@@ -145,18 +145,20 @@ class GUI_run:
         startlisty.check_if_participated(
             self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
         if startlisty.events_where_will_start != []:
-            window['-startlist-'].update(values=startlisty.events_where_will_start)
+            window['-TABLE_startlist-'].update(values=startlisty.events_where_will_start)
         else:
-            window['-startlist-'].update(values=[['no data']])
+            window['-TABLE_startlist-'].update(values=[['no data']])
         window['See all'].update(button_color=sg.theme_button_color()[1])
+        self.see_all=False
 
     def show_all_startlists(self, startlisty, window):
         if not hasattr(startlisty, 'startlists_list'):
             startlisty.get_incoming_events_list()
             startlisty.get_links_to_start_lists()
             startlisty.get_athletes_lists()
-        window['-startlist-'].update(values=startlisty.events_names_list_updated)
+        window['-TABLE_startlist-'].update(values=startlisty.events_names_list_updated)
         window['See all'].update(button_color='darkgreen')
+        self.see_all = True
 
     def find_and_display_recent_results(self, third_searching, last_ten_events, values, window):
         if not hasattr(third_searching, 'athletes_in_competitions_list'):
@@ -165,7 +167,7 @@ class GUI_run:
         third_searching.reverse_links_generator(last_ten_events.events_dict)
         window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
 
-    def browse_for_result(self, active_tab, event, stats, third_searching):
+    def browse_for_result(self, active_tab, event, stats, third_searching,startlisty):
         if event != []:
             match active_tab:
                 case '-tab4-':
@@ -179,3 +181,9 @@ class GUI_run:
                     # temp_table.get_competition_steps()
                     temp_table.display_table()
                     temp_table.Run_table()
+                case '-tab5-':
+                    if self.see_all:
+                        webbrowser.open(startlisty.events_names_list_updated[int(event[0])][-1])
+                    else:
+                        webbrowser.open(startlisty.events_where_will_start[int(event[0])][-1])
+

@@ -63,11 +63,11 @@ class Third_Searching():
                 print(step_1)
                 step_2 = step_1[-1].partition('&')
                 print(step_2)
-                step_3 = step_2[-1].replace('&rank=1',"")
+                step_3 = step_2[-1].replace('&rank=1', "")
                 print(step_3)
-                step_4 = (step_3.partition('impreza='))[-2]+(step_3.partition('impreza='))[-1]
+                step_4 = (step_3.partition('impreza='))[-2] + (step_3.partition('impreza='))[-1]
                 print(step_4)
-                step_5=step_1[0]+step_1[1]+step_4
+                step_5 = step_1[0] + step_1[1] + step_4
                 self.where_participated_events.append(step_5)
             # getting competition name
             self.link = event[1].partition("konkurencja=")
@@ -88,12 +88,14 @@ class Third_Searching():
     def create_basic_layout(self):
         self.menu = ['menu', create_hints_lists()]
         self.sixth_tab_layout = [
-            [sg.Text('Insert athletes data to find events in which he will be participating recently')],
-            [sg.InputText('athlete name', key='name_recent'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu5-', size=[20, 1])],
-            [sg.InputText('athlete last name', key='last_name_recent'),
-             sg.Button('Add to Favourites', key='-add_athl5-', size=[18, 1])],
-            [sg.Button('Find events', key='find_events_recent')],
+            [sg.Text(
+                "Enter an athlete's details to find events in which they were participating recently (only for biggest events)")],
+            [sg.InputText('name', key='name_recent'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu5-', size=(20, 1))],
+            [sg.InputText('last name', key='last_name_recent'),
+             sg.Button('Add to Favourites', key='-add_athl5-', size=(18, 1)),
+             sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu5-', size=(20, 1))],
+            [sg.Button('Find events', key='find_events_recent', size=(39, 1))],
             [sg.Table(
                 values=[],
                 headings=['', 'event'],

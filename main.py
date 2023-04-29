@@ -40,12 +40,11 @@ class MainWindow:
 
         self.layout = [
             [sg.TabGroup([[sg.Tab('Events', self.first_tab_layout, key='-tab1-')],
-
-                          [sg.Tab('Check recent results', stats.fourth_tab_layout, key='-tab3-')],
-                          [sg.Tab('Athletes', temp.second_tab_layout, key='-tab2-')],
-                          [sg.Tab('Advanced searching', stats.third_tab_layout, key='-tab4-')],
-                          [sg.Tab('Check startlists', startlisty.fifth_tab_layout, key='-tab5-')],
-                          [sg.Tab('Recent results', third_searching.sixth_tab_layout, key='-tab6-')],
+                          [sg.Tab("Athletes PR's", temp.second_tab_layout, key='-tab2-')],
+                          [sg.Tab('Results by Seasons', stats.fourth_tab_layout, key='-tab3-')],
+                          [sg.Tab('Domtel Recent Results', third_searching.sixth_tab_layout, key='-tab6-')],
+                          [sg.Tab('Advanced Searching', stats.third_tab_layout, key='-tab4-')],
+                          [sg.Tab('Startlists', startlisty.fifth_tab_layout, key='-tab5-')],
                           ],
                          tab_location='topleft', enable_events=True, key='-tabgroup-')]]
 
@@ -108,11 +107,11 @@ class MainWindow:
                         case '-tab_menu':
                             favourite.fill_the_textboxes_and_find(self.window, event)
                         case 'TABLE':
-
                             GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
-                                                         third_searching)
+                                                         third_searching,startlisty)
                             print(str(values[event]))
-
+                        case '-del_menu':
+                            favourite.get_active_tab_and_del_from_fav(self.window, event)
 
 class SubWindow:
     def __init__(self, title, competitions_lists_list, events_names_list):

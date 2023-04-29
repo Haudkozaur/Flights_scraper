@@ -4,6 +4,7 @@ import PySimpleGUI as sg
 from request_func import get_request
 from Add_To_Favourites import create_hints_lists
 
+
 class Start_Lists():
     def __init__(self, url):
         self.starter = get_request(url, 'iso-8859-2')
@@ -50,14 +51,12 @@ class Start_Lists():
             if (i[2] < (date.today() + self.month)) and (i[2] > date.today()):
                 self.events_names_list_updated.append(i)
 
-
     def get_links_to_start_lists(self):
         self.links_list = []
         for event in self.events_names_list_updated:
             self.event = get_request(event[4], 'iso-8859-2')
             self.event = self.event.find('a', class_="link", href=True, target="_blank")
             self.links_list.append(f'https://starter.pzla.pl/{self.event["href"]}')
-
 
     def get_athletes_lists(self):
         self.startlists_list = []
@@ -69,7 +68,6 @@ class Start_Lists():
                 for athl in cell.find_all('a'):
                     self.startlist.append(athl.text)
             self.startlists_list.append(self.startlist)
-
 
     def check_if_participated(self, first_last_name):
         self.events_where_will_start = []
@@ -84,25 +82,30 @@ class Start_Lists():
                         startlist)] in self.events_where_will_start:
                     self.events_where_will_start.append(
                         self.events_names_list_updated[self.startlists_list.index(startlist)])
+
         print(self.events_where_will_start)
 
     def produce_basic_layout(self):
         self.headings = ['Event', 'Localization', 'Date']
         self.menu = ['menu', create_hints_lists()]
         self.fifth_tab_layout = [
-            [sg.Text('Insert athletes data to find events in which he will be participating during incoming month')],
-            [sg.InputText('athelete name', key='name_startlist'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu4-', size=[20, 1])],
-            [sg.InputText('athelete last name', key='last_name_startlist'),
-             sg.Button('Add to Favourites', key='-add_athl4-', size=[18, 1])],
-            [sg.Button('Find events', key='find_events_startlist'), sg.Button('See all')],
+            [sg.Text(
+                "Enter an athlete's details to find events in which they will be participating during incoming month")],
+            [sg.InputText('name', key='name_startlist'),
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu4-', size=(20, 1))],
+            [sg.InputText('last name', key='last_name_startlist'),
+             sg.Button('Add to Favourites', key='-add_athl4-', size=(18, 1)),
+             sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu4-', size=(20, 1))],
+            [sg.Button('Find events', key='find_events_startlist', size=(39, 1)),
+             sg.Button('See all', size=(38, 1), key='See all')],
             [sg.Table(
                 values=[],
                 headings=self.headings,
-                col_widths=[50, 15, 12],
+                col_widths=[50, 18, 12],
                 auto_size_columns=False,
                 display_row_numbers=False,
                 vertical_scroll_only=False,
                 justification='center',
-                key='-startlist-',
-                row_height=35)]]
+                key='-TABLE_startlist-',
+                row_height=35,
+                enable_events=True)]]
