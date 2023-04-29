@@ -27,7 +27,7 @@ class Table:
                 self.row_text = row.text.strip().split()
                 self.rows_list.append(" ".join(self.row_text))
             self.rows_list_full.append(self.rows_list)
-
+        self.column_comp_steps = []
     def get_competition_steps(self):
         self.buttons_list = []
         for button in self.soup.find_all('a', class_='konkur_przycisk', href=True, target=False):
@@ -59,11 +59,13 @@ class Table:
             ]]
 
     def Run_table(self):
+
         self.window = sg.Window(self.event_name, self.layout, keep_on_top=True, size=(1400, 600))
         while True:
             event, values = self.window.read()
-            if event in (sg.WIN_CLOSED, 'Exit'):
-                self.table_exit = True
+
+            if event == sg.WIN_CLOSED:
+                self.window.close()
                 break
             if type(event) == int:
 
@@ -91,6 +93,7 @@ class Table:
                 for button in range(0, len(self.buttons_list)):
                     self.window[button].update(button_color=sg.theme_button_color()[1])
                 self.window[self.chosen_step].update(button_color='darkgreen')
+
 
                 self.window.refresh()
 

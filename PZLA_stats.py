@@ -43,7 +43,7 @@ class PZLA():
                 for athlete in self.rows_results[i].find_all('td'):
                     for j in athlete.find_all('a', class_='p1', href=True, onclick=True, target='blank'):
                         self.first_last_names_list.append([j.text,event])
-
+        print(self.first_last_names_list)
     def check_if_athl_participated(self, first_last_name):
         self.events_list_full_temp = []
         self.first_last_name = first_last_name
@@ -58,7 +58,7 @@ class PZLA():
         self.third_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating')],
             [sg.InputText('athlete name', key='name_PZLA'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-',size=[20, 1])],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu2-',size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name_PZLA'),
              sg.Button('Add to Favourites', key='-add_athl2-',size=[18, 1])],
             [sg.Button('Find events')],
@@ -70,13 +70,14 @@ class PZLA():
                 display_row_numbers=False,
                 vertical_scroll_only=False,
                 justification='center',
-                key='-stats-',
-                row_height=35)]]
+                key='-TABLE_stats-',
+                row_height=35,
+                enable_events=True)]]
 
     def produce_layout(self):
         self.column_of_events = []
         for i in range(0, len(self.events_list_full_temp)):
-            self.column_of_events.append([self.events_list_full_temp[i][0]])
+            self.column_of_events.append([self.events_list_full_temp[i][0], self.events_list_full_temp[i][1]])
         print(self.column_of_events)
 
     def create_basic_layout_domtel(self):
@@ -85,7 +86,7 @@ class PZLA():
         self.fourth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he was participating this year')],
             [sg.InputText('athlete name', key='name_PZLA_domtel'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-', size=[20, 1])],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu3-', size=[20, 1])],
             [sg.InputText('athlete last name', key='last_name_PZLA_domtel'),
              sg.Button('Add to Favourites', key='-add_athl3-', size=[18, 1])
              ],
@@ -103,8 +104,9 @@ class PZLA():
                 display_row_numbers=False,
                 vertical_scroll_only=False,
                 justification='center',
-                key='-stats-domtel-',
-                row_height=35)]]
+                key='-TABLE_stats-domtel-',
+                row_height=35,
+                )]]
 
     def get_events_from_athlete_site(self, url):
         self.athl_domtel = url

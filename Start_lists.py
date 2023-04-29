@@ -92,7 +92,7 @@ class Start_Lists():
         self.fifth_tab_layout = [
             [sg.Text('Insert athletes data to find events in which he will be participating during incoming month')],
             [sg.InputText('athelete name', key='name_startlist'),
-             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu-', size=[20, 1])],
+             sg.ButtonMenu('Choose from Favourites', self.menu, key='-tab_menu4-', size=[20, 1])],
             [sg.InputText('athelete last name', key='last_name_startlist'),
              sg.Button('Add to Favourites', key='-add_athl4-', size=[18, 1])],
             [sg.Button('Find events', key='find_events_startlist'), sg.Button('See all')],

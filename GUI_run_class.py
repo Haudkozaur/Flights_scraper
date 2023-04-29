@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 from Fav_athls import Favourite
 from input_encoding_func import encode_input
+import webbrowser
+from Table_class import Table
 
 
 class GUI_run:
@@ -55,35 +57,44 @@ class GUI_run:
             stats.get_athls_lists()
         stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
         stats.produce_layout()
-        window['-stats-'].update(values=stats.column_of_events)
+        window['-TABLE_stats-'].update(values=stats.column_of_events)
+        print(stats.column_of_events)
         window.refresh()
 
     def find_season_results(self, values, window, stats):
-        self.season = 'Out'
-        self.text_input_name_PZLA = values['name_PZLA_domtel']
-        self.text_input_last_name_PZLA = values['last_name_PZLA_domtel']
-        self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
-        self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
-        self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
-        print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
-        temp_fav_object = Favourite()
-        temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
-        temp_fav_object.find_in_PZLA()
-        stats.get_events_from_athlete_site(temp_fav_object.athl_domtel)
-        if stats.years_outdoor_list != []:
-            stats.get_season_results(stats.years_outdoor_list[-1])
-            window['-stats-domtel-'].update(values=stats.rows_list_full)
-            window['-years-'].update(visible=True)
-            window['-years-'].update(values=stats.years_nums_outdoor_list)
-        else:
-            window['-stats-domtel-'].update(values=[['no data']])
-            window['-years-'].update(values=stats.years_nums_outdoor_list)
-            window.refresh()
-        window['Outdoor_season'].update(visible=True)
-        window['Indoor_season'].update(visible=True)
-        window['Choose'].update(visible=True)
-        window['Outdoor_season'].update(button_color='darkgreen')
-        window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+        try:
+            self.season = 'Out'
+            self.text_input_name_PZLA = values['name_PZLA_domtel']
+            self.text_input_last_name_PZLA = values['last_name_PZLA_domtel']
+            self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
+            self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
+            self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
+            print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
+            temp_fav_object = Favourite()
+            temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
+            temp_fav_object.find_in_PZLA()
+            stats.get_events_from_athlete_site(temp_fav_object.athl_domtel)
+            if stats.years_outdoor_list != []:
+                stats.get_season_results(stats.years_outdoor_list[-1])
+                window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
+
+                window['-years-'].update(visible=True)
+                window['-years-'].update(values=stats.years_nums_outdoor_list)
+            else:
+                window['-TABLE_stats-domtel-'].update(values=[['no data']])
+                window['-years-'].update(values=stats.years_nums_outdoor_list)
+                window.refresh()
+            window['Outdoor_season'].update(visible=True)
+            window['Indoor_season'].update(visible=True)
+            window['Choose'].update(visible=True)
+            window['Outdoor_season'].update(button_color='darkgreen')
+            window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+        except:
+            sg.popup('Enter the correct data.')
+            window['-TABLE_stats-domtel-'].update(values=[])
+            window['Outdoor_season'].update(button_color=sg.theme_button_color()[1])
+            window['Indoor_season'].update(button_color=sg.theme_button_color()[1])
+            self.season = 'Out'
 
     def change_season_to_outdoor(self, window, stats):
         self.season = 'Out'
@@ -92,10 +103,10 @@ class GUI_run:
         if stats.years_outdoor_list != []:
             stats.get_season_results(stats.years_outdoor_list[-1])
 
-            window['-stats-domtel-'].update(values=stats.rows_list_full)
+            window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
             window['-years-'].update(values=stats.years_nums_outdoor_list)
         else:
-            window['-stats-domtel-'].update(values=[['no data']])
+            window['-TABLE_stats-domtel-'].update(values=[['no data']])
             window['-years-'].update(values=stats.years_nums_outdoor_list)
             window.refresh()
 
@@ -105,11 +116,11 @@ class GUI_run:
         window['Outdoor_season'].update(button_color=sg.theme_button_color()[1])
         if stats.years_indoor_list != []:
             stats.get_season_results(stats.years_indoor_list[-1])
-            window['-stats-domtel-'].update(values=stats.rows_list_full)
+            window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
             window['-years-'].update(values=stats.years_nums_indoor_list)
             window.refresh()
         else:
-            window['-stats-domtel-'].update(values=[['no data']])
+            window['-TABLE_stats-domtel-'].update(values=[['no data']])
             window['-years-'].update(values=stats.years_nums_indoor_list)
             window.refresh()
 
@@ -118,10 +129,10 @@ class GUI_run:
         self.selected_option = int((str(self.selected_option)).replace('[', "").replace(']', ""))
         if self.season == 'Out':
             stats.get_season_results(stats.outdoor_dictionary[self.selected_option])
-            window['-stats-domtel-'].update(values=stats.rows_list_full)
+            window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
         elif self.season == 'In':
             stats.get_season_results(stats.indoor_dictionary[self.selected_option])
-            window['-stats-domtel-'].update(values=stats.rows_list_full)
+            window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
 
     def get_startlists(self, values, startlisty, window):
         self.text_input_name_startlist = values['name_startlist']
@@ -153,3 +164,18 @@ class GUI_run:
         third_searching.check_if_participated(encode_input(values, 'name_recent', 'last_name_recent'))
         third_searching.reverse_links_generator(last_ten_events.events_dict)
         window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
+
+    def browse_for_result(self, active_tab, event, stats, third_searching):
+        if event != []:
+            match active_tab:
+                case '-tab4-':
+                    webbrowser.open(stats.column_of_events[int(event[0])][1])
+                case '-tab6-':
+                    temp_table = Table(third_searching.layout_list_full[int(event[0])][0],
+                                       third_searching.layout_list_full[int(event[0])][1],
+                                       third_searching.layout_list_full[int(event[0])][0])
+                    temp_table.get_headers()
+                    temp_table.get_rows()
+                    # temp_table.get_competition_steps()
+                    temp_table.display_table()
+                    temp_table.Run_table()
