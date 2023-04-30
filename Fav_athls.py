@@ -22,16 +22,16 @@ class Favourite:
             self.athl_domtel = (link['href'])
             break
         self.athl_domtel = f'https://statystyka.pzla.pl/{self.athl_domtel.replace("..", "")}'
-        print(self.athl_domtel)
+        # print(self.athl_domtel)
         self.athl_number = re.findall('\d+', self.athl_domtel)
         self.athl_number.sort()
         self.athl_number = self.athl_number[-1]
-        print(self.athl_number)
+        # print(self.athl_number)
         # with open("fav.txt", mode='a') as file:
         #     file.write(f'{self.first_last_name_encoded} {self.athl_number}\n')
         # winter
         self.athl_domtel_winter = f'{self.athl_domtel}&sezon_Z_L=Z'
-        print(self.athl_domtel_winter)
+        # print(self.athl_domtel_winter)
 
     def get_empty_table(self):
         self.headings_list = ['competition', 'result', 'date', 'city', 'age group']

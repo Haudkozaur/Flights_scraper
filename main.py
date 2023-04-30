@@ -67,7 +67,7 @@ class MainWindow:
 
             event, values = self.window.read()
 
-            print(event)
+            # print(event)
             match event:
                 case sg.WIN_CLOSED:
                     self.window.close()
@@ -87,7 +87,7 @@ class MainWindow:
                 case 'TABLE':
                     GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
                                                  third_searching, startlisty)
-                    print(str(values[event]))
+                    # print(str(values[event]))
 
                 case '-del_menu':
                     favourite.get_active_tab_and_del_from_fav(self.window, event)

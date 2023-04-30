@@ -37,7 +37,7 @@ class Add_To_Fav():
         try:
             self.text_input_name = (self.first_last_name.partition(" "))[2]
             self.text_input_last_name = (self.first_last_name.partition(" "))[0]
-            print(self.text_input_name + " " + self.text_input_last_name)
+            # print(self.text_input_name + " " + self.text_input_last_name)
             temp.encode(self.text_input_name + " " + self.text_input_last_name)
             temp.find_in_PZLA()
             temp.get_athl_site()
@@ -51,7 +51,7 @@ class Add_To_Fav():
                     else:
                         with open(self.filepath, "a", encoding='utf-8') as f:
                             f.write(str(self.first_last_name) + "\n")
-                        print('Added to Favourites')
+                        # print('Added to Favourites')
                         sg.popup('Added to Favourites')
                         for menu in self.tab_menus_list:
                             window[menu].update(['menu', create_hints_lists()])
@@ -60,7 +60,7 @@ class Add_To_Fav():
                     f.write(str(self.first_last_name) + "\n")
                 for menu in self.tab_menus_list:
                     window[menu].update(['menu', create_hints_lists()])
-                print('Favourites-folder created, athlete added')
+                # print('Favourites-folder created, athlete added')
                 sg.popup('Added to Favourites')
         except:
             sg.popup('Enter the correct data.')

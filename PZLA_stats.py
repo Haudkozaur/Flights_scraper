@@ -44,7 +44,7 @@ class PZLA():
                 for athlete in self.rows_results[i].find_all('td'):
                     for j in athlete.find_all('a', class_='p1', href=True, onclick=True, target='blank'):
                         self.first_last_names_list.append([j.text, event])
-        print(self.first_last_names_list)
+        # print(self.first_last_names_list)
 
     def check_if_athl_participated(self, first_last_name):
         self.events_list_full_temp = []
@@ -82,7 +82,7 @@ class PZLA():
         self.column_of_events = []
         for i in range(0, len(self.events_list_full_temp)):
             self.column_of_events.append([self.events_list_full_temp[i][0], self.events_list_full_temp[i][1]])
-        print(self.column_of_events)
+        # print(self.column_of_events)
 
     def create_basic_layout_domtel(self):
         self.headings = ['competition', 'result', 'date', 'city']

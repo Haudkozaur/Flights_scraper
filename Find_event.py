@@ -25,7 +25,7 @@ class Links_Generator():
             else:
                 self.events_results_links_list.append('')
         self.events_dict = {key: value for key, value in zip(self.events_results_links_list, self.events_names_list)}
-        print(self.events_dict)
+        # print(self.events_dict)
 
     def get_competitions_urls(self):
         self.competitions_lists_list = []

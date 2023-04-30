@@ -83,7 +83,7 @@ class Start_Lists():
                     self.events_where_will_start.append(
                         self.events_names_list_updated[self.startlists_list.index(startlist)])
 
-        print(self.events_where_will_start)
+        # print(self.events_where_will_start)
 
     def produce_basic_layout(self):
         self.headings = ['Event', 'Localization', 'Date']

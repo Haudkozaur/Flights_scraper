@@ -27,7 +27,7 @@ class GUI_run:
         try:
             self.text_input_name = values['name']
             self.text_input_last_name = values['last_name']
-            print(self.text_input_name + " " + self.text_input_last_name)
+            # print(self.text_input_name + " " + self.text_input_last_name)
             temp.encode(self.text_input_name + " " + self.text_input_last_name)
             temp.find_in_PZLA()
             temp.get_athl_site()
@@ -70,7 +70,7 @@ class GUI_run:
                 window['-click_text2-'].update(visible=True)
             else:
                 window['-TABLE_stats-'].update(values=self.no_data_prompt)
-            print(stats.column_of_events)
+            # print(stats.column_of_events)
             window['Find events'].update(disabled=False)
             window.refresh()
         else:
@@ -85,7 +85,7 @@ class GUI_run:
             self.text_input_name_PZLA = self.text_input_name_PZLA.lower()
             self.text_input_name_PZLA = self.text_input_name_PZLA.capitalize()
             self.text_input_last_name_PZLA = self.text_input_last_name_PZLA.upper()
-            print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
+            # print(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
             temp_fav_object = Favourite()
             temp_fav_object.encode(self.text_input_name_PZLA + " " + self.text_input_last_name_PZLA)
             temp_fav_object.find_in_PZLA()
@@ -162,7 +162,7 @@ class GUI_run:
                 startlisty.get_incoming_events_list()
                 startlisty.get_links_to_start_lists()
                 startlisty.get_athletes_lists()
-            print(self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
+            # print(self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
             startlisty.check_if_participated(
                 self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
             if startlisty.events_where_will_start != []:
