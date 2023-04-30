@@ -100,8 +100,8 @@ class PZLA():
              sg.Listbox(values=[], key="-years-", size=(20, 3), visible=False),
              sg.Button("Choose", visible=False, key="Choose")
              ],
-            [sg.Button('Outdoor', visible=False, key='Outdoor_season',size=(7, 1)),
-             sg.Button('Indoor', visible=False, key='Indoor_season',size=(7, 1))],
+            [sg.Button('Outdoor', visible=False, key='Outdoor_season', size=(7, 1)),
+             sg.Button('Indoor', visible=False, key='Indoor_season', size=(7, 1))],
             [sg.Table(
                 values=[],
                 headings=self.headings,

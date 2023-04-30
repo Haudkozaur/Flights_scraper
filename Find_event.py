@@ -1,4 +1,3 @@
-import PySimpleGUI as sg
 from request_func import get_request
 
 

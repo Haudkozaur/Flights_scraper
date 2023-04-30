@@ -76,6 +76,10 @@ class MainWindow:
                     self.event = event
                     sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
                     self.sub_windows[event] = sub_window
+                case 'Indoor_season':
+                    GUI_events.change_season_to_indoor(self.window, stats)
+                case 'Outdoor_season':
+                    GUI_events.change_season_to_outdoor(self.window, stats)
             self.event_str = MyStr(str(event))
             favourite = Add_To_Fav(self.window['-tabgroup-'].get(), values)
             match self.event_str:
@@ -83,12 +87,9 @@ class MainWindow:
                     favourite.get_active_tab_and_add_to_fav(self.window, temp)
                 case '-tab_menu':
                     favourite.fill_the_textboxes_and_find(self.window, event)
-
                 case 'TABLE':
                     GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
                                                  third_searching, startlisty)
-                    # print(str(values[event]))
-
                 case '-del_menu':
                     favourite.get_active_tab_and_del_from_fav(self.window, event)
                 case 'Submit':
@@ -102,10 +103,6 @@ class MainWindow:
                                      daemon=True).start()
                 case 'find_events_PZLA_domtel':
                     GUI_events.find_season_results(values, self.window, stats)
-                case 'Outdoor_season':
-                    GUI_events.change_season_to_outdoor(self.window, stats)
-                case 'Indoor_season':
-                    GUI_events.change_season_to_indoor(self.window, stats)
                 case 'Choose':
                     GUI_events.change_year(values, self.window, stats)
                 case 'find_events_startlist':
