@@ -72,6 +72,25 @@ class MainWindow:
                 case sg.WIN_CLOSED:
                     self.window.close()
                     break
+                case int():
+                    self.event = event
+                    sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
+                    self.sub_windows[event] = sub_window
+            self.event_str = MyStr(str(event))
+            favourite = Add_To_Fav(self.window['-tabgroup-'].get(), values)
+            match self.event_str:
+                case '-add_athl':
+                    favourite.get_active_tab_and_add_to_fav(self.window, temp)
+                case '-tab_menu':
+                    favourite.fill_the_textboxes_and_find(self.window, event)
+
+                case 'TABLE':
+                    GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
+                                                 third_searching, startlisty)
+                    print(str(values[event]))
+
+                case '-del_menu':
+                    favourite.get_active_tab_and_del_from_fav(self.window, event)
                 case 'Submit':
                     GUI_events.get_atlete_PRs(values, temp, self.window)
                 case 'Outdoor':
@@ -98,25 +117,6 @@ class MainWindow:
                 case 'find_events_recent':
                     threading.Thread(target=GUI_events.find_and_display_recent_results,
                                      args=(third_searching, last_ten_events, values, self.window), daemon=True).start()
-                case int():
-                    self.event = event
-                    sub_window = SubWindow(event, self.competitions_lists_list, self.events_names_list[self.event])
-                    self.sub_windows[event] = sub_window
-                case _:
-                    favourite = Add_To_Fav(self.window['-tabgroup-'].get(), values)
-                    self.event_str = MyStr(str(event))
-                    match self.event_str:
-                        case '-add_athl':
-                            favourite.get_active_tab_and_add_to_fav(self.window, temp)
-                        case '-tab_menu':
-                            favourite.fill_the_textboxes_and_find(self.window, event)
-                        case 'TABLE':
-                            GUI_events.browse_for_result(self.window['-tabgroup-'].get(), values[event], stats,
-                                                         third_searching, startlisty)
-                            print(str(values[event]))
-                        case '-del_menu':
-                            favourite.get_active_tab_and_del_from_fav(self.window, event)
-
 
 class SubWindow:
     def __init__(self, title, competitions_lists_list, events_names_list):

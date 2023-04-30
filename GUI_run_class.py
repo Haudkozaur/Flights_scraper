@@ -3,6 +3,7 @@ from Fav_athls import Favourite
 from input_encoding_func import encode_input
 import webbrowser
 from Table_class import Table
+from incorrect_data_checker import is_data_correct
 
 
 
@@ -56,20 +57,25 @@ class GUI_run:
             window.refresh()
 
     def advanced_events_searching(self, values, stats, window):
-        window['-TABLE_stats-'].update(
-            values=self.waiting_prompt)
-        if not hasattr(stats, 'events_list_full'):
-            stats.find_events()
-            stats.get_athls_lists()
-        stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
-        stats.produce_layout()
-        if stats.column_of_events != []:
-            window['-TABLE_stats-'].update(values=stats.column_of_events)
-            window['-click_text2-'].update(visible=True)
+        window['-TABLE_stats-'].update(values=self.waiting_prompt)
+        window['Find events'].update(disabled=True)
+        if is_data_correct(encode_input(values, 'name_PZLA', 'last_name_PZLA')):
+            if not hasattr(stats, 'events_list_full'):
+                stats.find_events()
+                stats.get_athls_lists()
+            stats.check_if_athl_participated(encode_input(values, 'name_PZLA', 'last_name_PZLA'))
+            stats.produce_layout()
+            if stats.column_of_events != []:
+                window['-TABLE_stats-'].update(values=stats.column_of_events)
+                window['-click_text2-'].update(visible=True)
+            else:
+                window['-TABLE_stats-'].update(values=self.no_data_prompt)
+            print(stats.column_of_events)
+            window['Find events'].update(disabled=False)
+            window.refresh()
         else:
-            window['-TABLE_stats-'].update(values=self.no_data_prompt)
-        print(stats.column_of_events)
-        window.refresh()
+            window['-TABLE_stats-'].update(values=[['Incorrect data']])
+            window['Find events'].update(disabled=False)
 
     def find_season_results(self, values, window, stats):
         try:
@@ -145,48 +151,65 @@ class GUI_run:
             window['-TABLE_stats-domtel-'].update(values=stats.rows_list_full)
 
     def get_startlists(self, values, startlisty, window):
-        self.see_all = False
-        window['-TABLE_startlist-'].update(
-            values=self.waiting_prompt)
-        self.text_input_name_startlist = values['name_startlist']
-        self.text_input_last_name_startlist = values['last_name_startlist']
-        if not hasattr(startlisty, 'startlists_list'):
-            startlisty.get_incoming_events_list()
-            startlisty.get_links_to_start_lists()
-            startlisty.get_athletes_lists()
-        print(self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
-        startlisty.check_if_participated(
-            self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
-        if startlisty.events_where_will_start != []:
-            window['-TABLE_startlist-'].update(values=startlisty.events_where_will_start)
-            window['-click_text4-'].update(visible=True)
+        if is_data_correct(encode_input(values, 'name_startlist', 'last_name_startlist')):
+            self.see_all = False
+            window['-TABLE_startlist-'].update(values=self.waiting_prompt)
+            window['find_events_startlist'].update(disabled=True)
+            window['See all'].update(disabled=True)
+            self.text_input_name_startlist = values['name_startlist']
+            self.text_input_last_name_startlist = values['last_name_startlist']
+            if not hasattr(startlisty, 'startlists_list'):
+                startlisty.get_incoming_events_list()
+                startlisty.get_links_to_start_lists()
+                startlisty.get_athletes_lists()
+            print(self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
+            startlisty.check_if_participated(
+                self.text_input_name_startlist + " " + self.text_input_last_name_startlist)
+            if startlisty.events_where_will_start != []:
+                window['-TABLE_startlist-'].update(values=startlisty.events_where_will_start)
+                window['-click_text4-'].update(visible=True)
+            else:
+                window['-TABLE_startlist-'].update(values=self.no_data_prompt)
+            window['find_events_startlist'].update(disabled=False)
+            window['See all'].update(disabled=False)
+            window['See all'].update(button_color=sg.theme_button_color()[1])
         else:
-            window['-TABLE_startlist-'].update(values=self.no_data_prompt)
-        window['See all'].update(button_color=sg.theme_button_color()[1])
+            window['-TABLE_startlist-'].update(values=[['Incorrect data']])
+            window['See all'].update(disabled=False)
+            window['find_events_startlist'].update(disabled=False)
 
     def show_all_startlists(self, startlisty, window):
         self.see_all = True
-        window['-TABLE_startlist-'].update(
-            values=self.waiting_prompt)
+        window['-TABLE_startlist-'].update(values=self.waiting_prompt)
+        window['find_events_startlist'].update(disabled=True)
+        window['See all'].update(disabled=True)
         if not hasattr(startlisty, 'startlists_list'):
             startlisty.get_incoming_events_list()
             startlisty.get_links_to_start_lists()
             startlisty.get_athletes_lists()
         window['-TABLE_startlist-'].update(values=startlisty.events_names_list_updated)
         window['-click_text4-'].update(visible=True)
+        window['find_events_startlist'].update(disabled=False)
+        window['See all'].update(disabled=False)
         window['See all'].update(button_color='darkgreen')
 
     def find_and_display_recent_results(self, third_searching, last_ten_events, values, window):
-        window['-THIRD_TABLE-'].update(values=[["", self.waiting_prompt[0][0]]])
-        if not hasattr(third_searching, 'athletes_in_competitions_list'):
-            third_searching.find_events_in_domtel(last_ten_events.competitions_lists_list)
-        third_searching.check_if_participated(encode_input(values, 'name_recent', 'last_name_recent'))
-        third_searching.reverse_links_generator(last_ten_events.events_dict)
-        if third_searching.layout_list_full != []:
-            window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
-            window['-click_text3-'].update(visible=True)
+        if is_data_correct(encode_input(values, 'name_recent', 'last_name_recent')):
+            window['-THIRD_TABLE-'].update(values=[["", self.waiting_prompt[0][0]]])
+            window['find_events_recent'].update(disabled=True)
+            if not hasattr(third_searching, 'athletes_in_competitions_list'):
+                third_searching.find_events_in_domtel(last_ten_events.competitions_lists_list)
+            third_searching.check_if_participated(encode_input(values, 'name_recent', 'last_name_recent'))
+            third_searching.reverse_links_generator(last_ten_events.events_dict)
+            if third_searching.layout_list_full != []:
+                window['-THIRD_TABLE-'].update(values=third_searching.layout_list_full)
+                window['-click_text3-'].update(visible=True)
+            else:
+                window['-THIRD_TABLE-'].update(values=[["", self.no_data_prompt[0][0]]])
+            window['find_events_recent'].update(disabled=False)
         else:
-            window['-THIRD_TABLE-'].update(values=[["", self.no_data_prompt[0][0]]])
+            window['-THIRD_TABLE-'].update(values=[["", 'Incorrect data']])
+            window['find_events_recent'].update(disabled=False)
 
     def browse_for_result(self, active_tab, event, stats, third_searching, startlisty):
         if event != []:

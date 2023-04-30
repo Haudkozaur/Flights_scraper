@@ -96,8 +96,8 @@ class Start_Lists():
             [sg.InputText('last name', key='last_name_startlist'),
              sg.Button('Add to Favourites', key='-add_athl4-', size=(18, 1)),
              sg.ButtonMenu('Delete from Favourites', self.menu, key='-del_menu4-', size=(20, 1))],
-            [sg.Button('Find events', key='find_events_startlist', size=(39, 1)),
-             sg.Button('See all', size=(38, 1), key='See all')],
+            [sg.Button('Find events', key='find_events_startlist', size=(39, 1), disabled=False),
+             sg.Button('See all', size=(38, 1), key='See all', disabled=False)],
             [sg.Text('Click on an event to go to the event website.', visible=False, key='-click_text4-')],
             [sg.Table(
                 values=[],
