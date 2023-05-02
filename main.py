@@ -10,7 +10,6 @@ from Add_To_Favourites import Add_To_Fav
 
 import threading
 
-
 sg.theme('DarkTeal10')
 
 last_ten_events = Links_Generator()
@@ -114,6 +113,7 @@ class MainWindow:
                 case 'find_events_recent':
                     threading.Thread(target=GUI_events.find_and_display_recent_results,
                                      args=(third_searching, last_ten_events, values, self.window), daemon=True).start()
+
 
 class SubWindow:
     def __init__(self, title, competitions_lists_list, events_names_list):
