@@ -52,7 +52,7 @@ class MainWindow:
 
         self.sub_windows = {}
 
-        self.window = sg.Window('Domtel scraper 1.0', self.layout, size=(800, 600), resizable=False,
+        self.window = sg.Window('PZLA_scraper 1.0.1', self.layout, size=(800, 600), resizable=False,
                                 grab_anywhere=False,
                                 grab_anywhere_using_control=False, keep_on_top=False)
 
