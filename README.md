@@ -88,7 +88,7 @@ upcoming Track and Field events in Poland.
 
 #### Favourites
 
-The most of s of the PZLA_scraper app includes three buttons that allow users to manage their favorite athletes. The '
+Most of tabs in the PZLA_scraper app includes three buttons that allow users to manage their favorite athletes. The '
 Choose from favorites' button lets users quickly fill in the input text field with the data of a chosen athlete from
 their list of favorites. To add an athlete to the list of favorites, the user enters their data into the input text
 field and clicks the 'Add to favorites' button. At any time, the user can also remove an athlete from their list of
