@@ -36,7 +36,7 @@ can easily browse through these events and access detailed information about eac
 This feature provides users with a convenient way to stay up-to-date on the latest Track and
 Field events.
 
-[Events](./ss_from_program/tab_1.jpg)
+[Events](ss_from_program/tab_1.jpg)
 
 #### Athletes PR's tab
 
@@ -52,7 +52,7 @@ The results by Seasons tab of the PZLA_scraper app allows users to view the Trac
 from previous
 years.
 
-[Results by Seasons](./ss_from_program/tab_3.jpg)
+[Results by Seasons](ss_from_program/tab_3.jpg)
 
 #### Domtel Recent Results tab
 
@@ -62,7 +62,7 @@ events listed in the first tab. The results for the selected athlete are display
 feature provides the most recent results from the biggest Track and Field events in Poland because it can even display
 live results.
 
-[Domtel Recent Results](./ss_from_program/tab_4.jpg)
+[Domtel Recent Results](ss_from_program/tab_4.jpg)
 
 #### Advanced Searching tab
 
@@ -74,7 +74,7 @@ feature can take a considerable amount of time to run, as the program is sending
 website to retrieve the results for each event. Nonetheless, this feature provides users with a comprehensive overview
 of an athlete's performance across all events in the current year.
 
-[Advanced Searching](./ss_from_program/tab_5.jpg)
+[Advanced Searching](ss_from_program/tab_5.jpg)
 
 #### Startlists tab
 
@@ -84,7 +84,7 @@ will be starting soon. In addition, users can also view a list of all available 
 month. This can be especially useful for fans who want to follow their favorite athletes and stay up-to-date on all the
 upcoming Track and Field events in Poland.
 
-[Startlists](./ss_from_program/tab_6.jpg)
+[Startlists](ss_from_program/tab_6.jpg)
 
 #### Favourites
 
@@ -94,7 +94,7 @@ their list of favorites. To add an athlete to the list of favorites, the user en
 field and clicks the 'Add to favorites' button. At any time, the user can also remove an athlete from their list of
 favorites by clicking the 'Delete from favorites' button.
 
-[Favourites](./ss_from_program/fav.jpg)
+[Favourites](https://github.com/Haudkozaur/PZLA_scraper/blob/main/ss_from_program/fav.jpg)
 
 # License
 
