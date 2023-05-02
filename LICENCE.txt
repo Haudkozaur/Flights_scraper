@@ -8,3 +8,8 @@ or reliability of the data. We are not responsible for any inaccuracies,
 errors, or omissions in the data, or for any damages that may arise from
 the use or distribution of the data. Users of the program are solely responsible
 for their use of the data and should exercise caution when using it for any purpose.
+
+The Law of Surprise: In the event that you use this program, you acknowledge and agree that
+you are bound by the ancient tradition of the Law of Surprise. 
+As such, you agree to offer the creator of this program a reward in the form of the next thing 
+you find at home that you did not know you had.
