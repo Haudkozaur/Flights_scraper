@@ -12,6 +12,8 @@ The program scrapes data from the following websites:
 
 ## Installation
 
+If you are familiar with the Python programming language and git technology:
+
 1. Clone the repository: git clone https://github.com/Haudkozaur/PZLA_scraper.git
 2. Install the required packages: pip install -r requirements.txt .
 
