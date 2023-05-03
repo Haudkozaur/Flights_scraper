@@ -116,5 +116,6 @@ it for any purpose.
 - [requests](https://pypi.org/project/requests/)
 - [PySimpleGUI](https://www.pysimplegui.org/en/latest/)
 - [Pyinstaller](https://www.pyinstaller.org/)
-
+- [stack overflow users](https://stackoverflow.com/)
+- All my programming mentors 
 
