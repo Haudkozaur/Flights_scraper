@@ -12,6 +12,8 @@ The program scrapes data from the following websites:
 
 ## Installation
 
+If you are familiar with the Python programming language and git technology:
+
 1. Clone the repository: git clone https://github.com/Haudkozaur/PZLA_scraper.git
 2. Install the required packages: pip install -r requirements.txt .
 
@@ -36,7 +38,7 @@ can easily browse through these events and access detailed information about eac
 This feature provides users with a convenient way to stay up-to-date on the latest Track and
 Field events.
 
-[Events](ss_from_program/tab_1.jpg)
+![Events](ss_from_program/tab_1.jpg)
 
 #### Athletes PR's tab
 
@@ -44,7 +46,7 @@ The athletes PR's tab of the PZLA_scraper app allows users to view the personal 
 Track and
 Field events.
 
-[Athletes PR's](./ss_from_program/tab_2.jpg)
+![Athletes PR's](./ss_from_program/tab_2.jpg)
 
 #### Results by Seasons tab
 
@@ -52,7 +54,7 @@ The results by Seasons tab of the PZLA_scraper app allows users to view the Trac
 from previous
 years.
 
-[Results by Seasons](ss_from_program/tab_3.jpg)
+![Results by Seasons](ss_from_program/tab_3.jpg)
 
 #### Domtel Recent Results tab
 
@@ -62,7 +64,7 @@ events listed in the first tab. The results for the selected athlete are display
 feature provides the most recent results from the biggest Track and Field events in Poland because it can even display
 live results.
 
-[Domtel Recent Results](ss_from_program/tab_4.jpg)
+![Domtel Recent Results](ss_from_program/tab_4.jpg)
 
 #### Advanced Searching tab
 
@@ -74,7 +76,7 @@ feature can take a considerable amount of time to run, as the program is sending
 website to retrieve the results for each event. Nonetheless, this feature provides users with a comprehensive overview
 of an athlete's performance across all events in the current year.
 
-[Advanced Searching](ss_from_program/tab_5.jpg)
+![Advanced Searching](ss_from_program/tab_5.jpg)
 
 #### Startlists tab
 
@@ -84,17 +86,17 @@ will be starting soon. In addition, users can also view a list of all available 
 month. This can be especially useful for fans who want to follow their favorite athletes and stay up-to-date on all the
 upcoming Track and Field events in Poland.
 
-[Startlists](ss_from_program/tab_6.jpg)
+![Startlists](ss_from_program/tab_6.jpg)
 
 #### Favourites
 
-The most of s of the PZLA_scraper app includes three buttons that allow users to manage their favorite athletes. The '
-Choose from favorites' button lets users quickly fill in the input text field with the data of a chosen athlete from
+Most of tabs in the PZLA_scraper app includes three buttons that allow users to manage their favorite athletes. The 
+'Choose from favorites' button lets users quickly fill in the input text field with the data of a chosen athlete from
 their list of favorites. To add an athlete to the list of favorites, the user enters their data into the input text
 field and clicks the 'Add to favorites' button. At any time, the user can also remove an athlete from their list of
 favorites by clicking the 'Delete from favorites' button.
 
-[Favourites](https://github.com/Haudkozaur/PZLA_scraper/blob/main/ss_from_program/fav.jpg)
+![Favourites](https://github.com/Haudkozaur/PZLA_scraper/blob/main/ss_from_program/fav.jpg)
 
 # License
 
@@ -114,5 +116,6 @@ it for any purpose.
 - [requests](https://pypi.org/project/requests/)
 - [PySimpleGUI](https://www.pysimplegui.org/en/latest/)
 - [Pyinstaller](https://www.pyinstaller.org/)
-
+- [stack overflow users](https://stackoverflow.com/)
+- All my programming mentors 
 
