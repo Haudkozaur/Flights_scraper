@@ -40,7 +40,7 @@ class Links_Generator():
                         for z in y.find_all('a', class_="konkur_przycisk2_wyniki", href=True):
                             if self.prefix[0] != 'https://online':
                                 self.competitions_list.append(
-                                    [f'{z.text} M', f'{self.prefix[0]}.domtel-sport.pl/{z["href"]}'])
+                                    [f'{z.text} M', f'{self.prefix[0]}.domtel-sport.pl.domtel-sport.pl/{z["href"]}'])
                             else:
                                 self.competitions_list.append([
                                     f'{z.text} M', f'{self.prefix[0]}.domtel-sport.pl/index2.php{z["href"]}'])
